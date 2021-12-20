@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-key
+data:
+  app-color: red
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webapp-color-pod
+  labels: 
+    app: webapp
+    env: prod
+    formation: Frazer 
+spec:
+  containers:
+    - name: webapp-color
+      image: kodekloud/webapp-color
+      ports:
+        - containerPort: 8080
+      env:
+        - name: APP_COLOR 
+          valueFrom: 
+          configMapKeyRef:
+            name: webapp-key
+            key: app-color

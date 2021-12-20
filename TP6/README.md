@@ -52,4 +52,4 @@ strategy:
   
     maxSurge: 1
     
-    maxUnavailable: 1
+    maxUnavailable: 1 

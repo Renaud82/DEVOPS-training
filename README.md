@@ -1,4 +1,4 @@
-# Kubernetes-training
+# Kubernetes-training / TP6
 
 vi pod.yaml
 

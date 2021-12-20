@@ -34,3 +34,6 @@ kubectl get rs --show-labels
 kubectl get po --show-labels
 
 kubectl describe po rsnginx-85fdcb8f89-cls4w
+****************************************
+
+kubectl edit deploy rsnginx		-> permet de modifier certains paramètres directement

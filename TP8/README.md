@@ -1,7 +1,5 @@
 # Kubernetes-training / TP8
-```sh
-kubectl get ns
-```
+Création d'un manifest qui crée un namespace nommé production (cf. .yaml)
 ```sh
 vi namespace.yaml
 ```

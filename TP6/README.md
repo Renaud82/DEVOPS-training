@@ -46,10 +46,10 @@ OU
 
 strategy:
 
-  type: RollingUpdate
+&emsp;type: RollingUpdate
   
-  rollingUpdate:
+&emsp;rollingUpdate:
   
-    maxSurge: 1
+&emsp;&emsp;maxSurge: 1
     
-    maxUnavailable: 1 
+&emsp;&emsp;maxUnavailable: 1 

@@ -37,3 +37,19 @@ kubectl describe po rsnginx-85fdcb8f89-cls4w
 ****************************************
 
 kubectl edit deploy rsnginx		-> permet de modifier certains paramètres directement
+
+strategy:
+
+  type: Recreate
+
+OU
+
+strategy:
+
+  type: RollingUpdate
+  
+  rollingUpdate:
+  
+    maxSurge: 1
+    
+    maxUnavailable: 1

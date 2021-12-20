@@ -1,3 +1,5 @@
+# Kubernetes-training / TP8
+
 kubectl get ns
 
 vi namespace.yaml

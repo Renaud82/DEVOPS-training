@@ -1,9 +1,13 @@
 # Kubernetes-training / TP6
 
+On créer le manifest (cf. pod.yaml)
+```sh
 vi pod.yaml
-
+```
+Lancement du manifest
+```sh
 kubectl apply -f pod.yaml
-
+```
 kubectl get po --show-labels
 
 kubectl port-forward webapp-color 8080:8080 --address 0.0.0.0

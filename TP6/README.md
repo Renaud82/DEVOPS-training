@@ -40,7 +40,7 @@ kubectl edit deploy rsnginx		-> permet de modifier certains paramètres directem
 
 strategy:
 
-  type: Recreate
+&emsp;type: Recreate
 
 OU
 

@@ -57,6 +57,8 @@ echo 'source <(kubectl completion bash)' >> ${HOME}/.bashrc && source ${HOME}/.b
 ## Activer Ingress
 ```sh
 minikube addons enable ingress
+kubectl get ns
+kubectl get po -n ingress-nginx
 ```
 
 # Storage

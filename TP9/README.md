@@ -23,10 +23,10 @@ Vérification
 kubectl get pvc
 kubectl get pv
 ```
-Création d'un manifest déployant mysql mais le pod utilisera le volume de stockage le PVC créé précédemment (cf. mysql-volume-pv.yaml)
+Création d'un manifest déployant mysql mais le pod utilisera le volume de stockage le PVC créé précédemment (cf. mysql-volumepv.yaml)
 ```sh
-vi mysql-volume-pv.yaml
-kubectl apply -f mysql-volume-pv.yaml 
+vi mysql-volumepv.yaml
+kubectl apply -f mysql-volumepv.yaml 
 ```
 Vérification
 ```sh

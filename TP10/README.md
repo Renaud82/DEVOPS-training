@@ -1,11 +1,13 @@
 # Kubernetes-training / TP10
+Création de deux deployments avec chacun 2 replicas de l’application kodekloud/webapp-color en rouge et en blue 
+(cf. deploy-webapp-blue.yml et deploy-webapp-red.yml)
 ```sh
 vi deploy-webapp-blue.yaml
 kubectl apply -f deploy-webapp-blue.yaml 
 vi deploy-webapp-red.yaml
 kubectl apply -f deploy-webapp-red.yaml 
 ```
-
+Création d'un service de type clusterIp pour exposer chaque deployement précédent (cf. service-webapp-blue.yaml et service-webapp-red.yaml)
 ```sh
 vi service-webapp-blue.yaml
 kubectl apply -f service-webapp-blue.yaml 

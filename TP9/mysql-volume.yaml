@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql-volume
+  labels: 
+    app: mysql
+    env: prod
+    formation: Frazer 
+spec:
+  containers:
+    - name: mysql
+      image: mysql
+      env:
+        - name: MYSQL_USER 
+          value: easy
+        - name: MYSQL_PASSWORD 
+          value: easy
+        - name: MYSQL_DATABASE 
+          value: easytraining
+        - name: MYSQL_ROOT_PASSWORD 
+          value: password
+#lien du volume à utiliser pour cet hote  
+      volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-data
+        - mountPath: /opt
+          name: opt-data
+  #creation du volume
+  volumes: 
+    - name: mysql-data
+      hostPath:
+        path: /data-volume
+        type: DirectoryOrCreate
+    - name: opt-data
+      hostPath:
+        path: /data-opt
+        type: DirectoryOrCreate

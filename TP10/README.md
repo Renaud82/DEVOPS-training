@@ -15,22 +15,23 @@ vi service-webapp-red.yaml
 kubectl apply -f service-webapp-red.yaml 
 ```
 Configuration d'une règle ingress permettant de consommer les deux applications comme suit:
--Host: www.renaud-webapp.com
--Path : /red et /blue (rouge et bleu étant les couleurs des différentes pages web obtenues)
+- Host: www.renaud-webapp.com
+- Path : /red et /blue (rouge et bleu étant les couleurs des différentes pages web obtenues)
 ```sh
 vi webapp-ingress.yaml
 kubectl apply -f webapp-ingress.yaml 
 ```
-
+Vérification de la configuration de la règle
 ```sh
 kubectl describe ingress nginx-rule
 ```
-
+Modification du host
 ```sh
 sudo vi /etc/hosts
 On ajoute 127.0.0.1 www.renaud-webapp.com
 ```
-
+Test du bon fonctionnement de la règle à l'aide d'un curl en local:
+- Rouge
 ```sh
 curl http://www.renaud-webapp.com/red
 ```
@@ -46,6 +47,7 @@ curl http://www.renaud-webapp.com/red
   <h1>Hello from rswebapp-red-sd55h!</h1>
 </div>
 ```
+- Bleu
 ```sh
 curl http://www.renaud-webapp.com/blue
 ```

@@ -14,7 +14,9 @@ kubectl apply -f service-webapp-blue.yaml
 vi service-webapp-red.yaml
 kubectl apply -f service-webapp-red.yaml 
 ```
-Création
+Configuration d'une règle ingress permettant de consommer les deux applications comme suit:
+-Host: www.renaud-webapp.com
+-Path : /red et /blue (rouge et bleu étant les couleurs des différentes pages web obtenues)
 ```sh
 vi webapp-ingress.yaml
 kubectl apply -f webapp-ingress.yaml 

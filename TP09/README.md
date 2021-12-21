@@ -1,4 +1,4 @@
-# Kubernetes-training / TP9
+# Kubernetes-training / TP09
 Création d'un manifest déployant un pod mysql, avec le dossier contenant la base de données monté sur le nœud dans /data-volume (cf. mysql-volume.yaml)
 ```sh
 vi mysql-volume.yaml

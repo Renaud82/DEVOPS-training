@@ -1,4 +1,4 @@
-# Kubernetes-training / TP7
+# Kubernetes-training / TP07
 
 vi webapp-configmap.yaml
 

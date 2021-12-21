@@ -1,4 +1,4 @@
-# Kubernetes-training / TP6
+# Kubernetes-training / TP06
 
 On créer le manifest (cf. pod.yaml)
 ```sh

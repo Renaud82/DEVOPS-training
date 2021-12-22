@@ -6,7 +6,7 @@ Création d'un manifest qui créer un namespace nommé production (cf. namespace
 vi namespace.yaml
 ```
 ********************************
-![Screenshot](source\IMG-001.PNG)
+![Screenshot](sources\IMG-001.png)
 
-![image](img\nginxwebapp.PNG)
+![image](sources\IMG-001.png)
 

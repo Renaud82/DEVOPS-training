@@ -87,7 +87,7 @@ echo 'source <(kubectl completion bash)' >> ${HOME}/.bashrc
 
 <br />
 
-## III-	Création des manifest
+## III-	Création des manifests
 
 <br />
 
@@ -114,7 +114,7 @@ data:
 kubectl apply -f secret.yaml
 ```
 
-</br>
+**************************************************
 
 * **Création du manifest de déploiement de mySQL**
 ```sh
@@ -173,4 +173,41 @@ spec:
             path: /db-data
             type: DirectoryOrCreate
 ```
+</br>
+
+* **On lance le déploiement et on vérifie le montage:**
+```sh
+kubectl apply -f deploy-mysql.yaml
+ls /
+```
+![screenshot011](./sources/IMG-011.png)
+
+</br>
+
+* **Création du manifest du service custerIP pour exposer le pod mySQL**
+```sh
+vi service-mysql.yaml
+```
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 3306
+      port: 3306
+  selector:
+        app: mysql
+```
+
+</br>
+
+* **On lance le service:**
+```sh
+kubectl apply -f service-mysql.yaml
+```
+
+**************************************************
 

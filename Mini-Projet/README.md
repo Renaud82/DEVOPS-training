@@ -91,7 +91,7 @@ echo 'source <(kubectl completion bash)' >> ${HOME}/.bashrc
 
 <br />
 
-* **Création du manifest de secret pour la connexion à mySQL
+* **Création du manifest de secret pour la connexion à mySQL**
 
 ```sh
 vi secret.yaml

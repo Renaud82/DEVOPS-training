@@ -300,3 +300,59 @@ spec:
 ```sh
 kubectl apply -f service-wordpress.yaml
 ```
+<br />
+
+## IV-	Vérification du lancement de Wordpress
+
+<br />
+
+```html
+http://3.92.231.219:30009
+```
+![screenshot013](./sources/IMG-013.png)
+
+<br />
+
+## V-	Ingress
+
+<br />
+
+* **Activation d'Ingress:**
+```sh
+minikube addons enable ingress
+```
+
+<br />
+
+* **Création du manifest des règles Ingress :**
+```sh
+vi ingress.yaml
+```
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-rule
+spec:
+  rules:
+  - host: www.renaud-wordpress.com
+    http:
+      paths:
+      - path: /
+        backend:
+          service:
+            name: wordpress-service
+            port:
+              number: 80
+        pathType: Prefix
+```
+
+<br />
+
+* **On exécute le manifest :**
+```sh
+kubectl apply -f ingress.yaml
+```
+
+
+

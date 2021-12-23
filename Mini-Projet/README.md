@@ -211,3 +211,63 @@ kubectl apply -f service-mysql.yaml
 
 **************************************************
 
+* **Création du manifest de déploiement de wordpress**
+```sh
+vi deploy-wordpress.yaml
+```
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rswordpress
+  labels:
+    role: front
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      name: wordpress
+      labels:
+        app: wordpress
+        type: pod
+    spec:
+      containers:
+        - name: wordpress
+          image: wordpress
+          env:
+            - name: WORDPRESS_DB_USER 
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql_user
+            - name: WORDPRESS_DB_PASSWORD 
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql_pwd
+            - name: WORDPRESS_DB_NAME 
+              value: easytraining
+            - name: WORDPRESS_DB_HOST 
+              value: mysql-service
+#lien du volume à utiliser pour cet hote  
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: wordpress-data
+#creation du volume
+      volumes: 
+        - name: wordpress-data
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate
+```
+
+* **On lance le déploiement et on vérifie le montage:**
+```sh
+kubectl apply -f deploy-wordpress.yaml
+
+ls /
+```
+![screenshot012](./sources/IMG-012.png)

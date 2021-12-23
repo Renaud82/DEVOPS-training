@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rsmysql
+  labels:
+    role: bdd
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      name: mysql
+      labels:
+        app: mysql
+        type: pod
+    spec:
+      containers:
+        - name: mysql
+          image: mysql
+          env:
+            - name: MYSQL_USER 
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql_user
+            - name: MYSQL_PASSWORD 
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql_pwd
+            - name: MYSQL_DATABASE 
+              value: easytraining
+            - name: MYSQL_ROOT_PASSWORD 
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql_root_pwd
+          ports:
+            - containerPort: 3306
+#lien du volume à utiliser pour cet hote  
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-data
+#creation du volume
+      volumes: 
+        - name: mysql-data
+          hostPath:
+            path: /db-data
+            type: DirectoryOrCreate
+
+

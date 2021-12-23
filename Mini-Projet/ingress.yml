@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-rule
+spec:
+  rules:
+  - host: www.renaud-wordpress.com
+    http:
+      paths:
+      - path: /
+        backend:
+          service:
+            name: wordpress-service
+            port:
+              number: 80
+        pathType: Prefix

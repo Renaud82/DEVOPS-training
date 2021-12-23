@@ -178,6 +178,7 @@ spec:
 * **On lance le déploiement et on vérifie le montage:**
 ```sh
 kubectl apply -f deploy-mysql.yaml
+
 ls /
 ```
 ![screenshot011](./sources/IMG-011.png)
@@ -271,3 +272,31 @@ kubectl apply -f deploy-wordpress.yaml
 ls /
 ```
 ![screenshot012](./sources/IMG-012.png)
+
+</br>
+
+* **Création du manifest du service nodePort pour exposer le frontend wordpress**
+```sh
+vi service-wordpress.yaml
+```
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-service
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 80
+      port: 80
+      nodePort: 30009
+  selector:
+        app: wordpress
+```
+
+</br>
+
+* **On lance le service:**
+```sh
+kubectl apply -f service-wordpress.yaml
+```

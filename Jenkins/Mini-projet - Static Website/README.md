@@ -302,33 +302,30 @@ pipeline {
 
 ### A – Trigger GitHub
 
+![screenshot026](./images/IMG-026.png)
+
+* Configuration du webhook sur GitHub
+![screenshot027](./images/IMG-027.png)
+![screenshot028](./images/IMG-028.png)
  
 
-  
-•	Configuration du webhook sur GitHub
+### B – Embeddable Build Status
 
- 
+![screenshot029](./images/IMG-029.png)
 
-B – Embeddable Build Status
+* On récupère le lien Markdown
+![screenshot030](./images/IMG-030.png)
 
- 
-
-•	On récupère le lien Markdown
-
-  
-
-
-•	On rajoute le lien dans le fichier README.md
+* On rajoute le lien dans le fichier README.md
 
 [![Build Status](http://54.146.251.134:8080/buildStatus/icon?job=renaud-deploy-staticwebsite)](http://54.146.251.134:8080/job/renaud-deploy-staticwebsite/)
 
- 
+![screenshot031](./images/IMG-031.png)
+![screenshot032](./images/IMG-032.png)
 
+<br />
 
- 
- 
-
-C – Slack notification
+### C – Slack notification
 
  
 

@@ -358,37 +358,21 @@ pipeline {
 
 ### D – TEST du pipeline
 
-
-•	Modification du fichier Index.html
-
+* Modification du fichier Index.html
+![screenshot041](./images/IMG-041.png)
  
-
-
-
-•	Déclenchement automatique du pipeline
-
+* Déclenchement automatique du pipeline
+![screenshot042](./images/IMG-042.png)
  
-
- 
-
-•	Vérification en environnement de Staging :
-
+* Vérification en environnement de Staging :
+![screenshot043](./images/IMG-043.png)
  
+* On valide la livraison en production :
+![screenshot044](./images/IMG-044.png)
+![screenshot045](./images/IMG-045.png)
 
-
-
-•	On valide la livraison en production :
-
-
- 
- 
-
-
- 
-
-
-•	Vérification de la notification Slack
-
+ * Vérification de la notification Slack
+![screenshot046](./images/IMG-046.png)
  
 
 

@@ -104,7 +104,7 @@ http://54.146.251.134:8080/
 ![screenshot009](./images/IMG-009.png)
 ![screenshot010](./images/IMG-010.png)
 ![screenshot011](./images/IMG-011.png)
- 
+![screenshot011](./images/IMG-012.png)
 
 * Docker et Docker compose :
 ```sh
@@ -147,12 +147,12 @@ ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
 ### A – Création des crédential
 
 * dockerHub (dockerhub_password) :
-![screenshot012](./images/IMG-012.png)
+![screenshot013](./images/IMG-013.png)
 
 * key ssh production environment (ec2_prod_private_key)
-![screenshot013](./images/IMG-013.png)
 ![screenshot014](./images/IMG-014.png)
 ![screenshot015](./images/IMG-015.png)
+![screenshot016](./images/IMG-016.png)
  
 ### B – Création du pipeline
 

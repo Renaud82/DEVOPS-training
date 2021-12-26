@@ -156,20 +156,19 @@ ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
  
 ### B – Création du pipeline
 
- 
+![screenshot017](./images/IMG-017.png)
 
- 
+* Création de la variable de TAG :
+![screenshot018](./images/IMG-018.png) 
 
-•	Création de la variable de TAG :
- 
+* Repository GIT :
+![screenshot019](./images/IMG-019.png) 
 
-•	Repository GIT :
- 
+* Ouverture des port 5000 (staging) et 5001 (production) sur le groupe de sécurité aws
+![screenshot020](./images/IMG-020.png)
 
-•	Ouverture des port 5000 (staging) et 5001 (production) sur le groupe de sécurité aws
-  
-•	Jenkinsfile
-
+* Jenkinsfile
+```sh
 pipeline {
 
     environment {
@@ -281,30 +280,27 @@ pipeline {
         }
     }
 }
+```
 
-C – Lancement du pipeline
+### C – Lancement du pipeline
 
-•	En attente de validation pour la production :
- 
+* En attente de validation pour la production :
+![screenshot021](./images/IMG-021.png)
 
-•	Vérification du repository DockerHub :
- 
- 
+* Vérification du repository DockerHub :
+![screenshot022](./images/IMG-022.png)
 
 •	Vérification de l’environnement de Staging
-
+![screenshot023](./images/IMG-023.png)
  
-
 •	Après validation on vérifie en environnement de production
-
+![screenshot024](./images/IMG-024.png)
+![screenshot025](./images/IMG-025.png)
  
 
- 
- 
+## IV- Ajout de plugin au Pipeline
 
-IV-	Ajout de plugin au Pipeline
-
-A – Trigger GitHub
+### A – Trigger GitHub
 
  
 

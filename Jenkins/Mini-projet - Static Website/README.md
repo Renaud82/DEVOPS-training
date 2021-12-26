@@ -317,8 +317,9 @@ pipeline {
 ![screenshot030](./images/IMG-030.png)
 
 * On rajoute le lien dans le fichier README.md
-
+```sh
 [![Build Status](http://54.146.251.134:8080/buildStatus/icon?job=renaud-deploy-staticwebsite)](http://54.146.251.134:8080/job/renaud-deploy-staticwebsite/)
+```
 
 ![screenshot031](./images/IMG-031.png)
 ![screenshot032](./images/IMG-032.png)
@@ -326,31 +327,24 @@ pipeline {
 <br />
 
 ### C – Slack notification
-
+![screenshot033](./images/IMG-033.png)
  
 
-•	Création du canal (ynov-project-jenkins)
-
+* Création du canal (ynov-project-jenkins)
+![screenshot034](./images/IMG-034.png)
+![screenshot035](./images/IMG-035.png)
+![screenshot036](./images/IMG-036.png)
+![screenshot037](./images/IMG-037.png)
+![screenshot038](./images/IMG-038.png)
  	 
+* Création credential secret text
+![screenshot039](./images/IMG-039.png)
 
+* Configuration de Slack dans Jenkins
+![screenshot040](./images/IMG-040.png)
  
- 
- 
-
- 
-
-•	Création credential secret text
-
- 
- 
-
-•	Configuration de Slack dans Jenkins
-
- 
-
-•	Ajout des lignes de commande dans Jenkinsfile pour la notification Slack
-
-
+* Ajout des lignes de commande dans Jenkinsfile pour la notification Slack
+```sh
     post {
         success{
             slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
@@ -359,11 +353,10 @@ pipeline {
             slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
     }
+```
+<br />
 
-
- 
-
-D – TEST du pipeline
+### D – TEST du pipeline
 
 
 •	Modification du fichier Index.html

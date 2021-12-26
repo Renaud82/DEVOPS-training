@@ -303,9 +303,9 @@ pipeline {
 ### A – Trigger GitHub
 
 ![screenshot026](./images/IMG-026.png)
+![screenshot027](./images/IMG-027.png)
 
 * Configuration du webhook sur GitHub
-![screenshot027](./images/IMG-027.png)
 ![screenshot028](./images/IMG-028.png)
  
 

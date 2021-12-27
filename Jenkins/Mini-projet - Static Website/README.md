@@ -1,5 +1,12 @@
 # Mini Projet JENKINS - Static Website
-## I- Installation
+
+# Table des matières
+I. [Installation](#install)
+II. [Build Image](#docker)
+III. [Pipeline](#pipeline)
+IV. [Ajout de plugin au Pipeline](#pugin)
+
+## I- Installation <a name="install"></a>
 ### A – Création d’une machine cloud ec2 (renaud-ec2-prod)
 ![screenshot001](./images/IMG-001.png)
 ![screenshot002](./images/IMG-002.png)
@@ -130,7 +137,7 @@ Projet basé sur le repository Git :
 https://github.com/diranetafen/static-website-example.git
 
 
-## II- Build Image (Docker)
+## II- Build Image (Docker) <a name="docker"></a>
 
 Créer un fichier Dockerfile permettant de conteneuriser l’application static-website :
 ```sh
@@ -143,7 +150,7 @@ EXPOSE 80
 ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
 ```
 
-## III- Pipeline
+## III- Pipeline <a name="pipeline"></a>
 ### A – Création des crédential
 
 * dockerHub (dockerhub_password) :
@@ -298,7 +305,7 @@ pipeline {
 ![screenshot025](./images/IMG-025.png)
  
 
-## IV- Ajout de plugin au Pipeline
+## IV- Ajout de plugin au Pipeline <a name="pugin"></a>
 
 ### A – Trigger GitHub
 

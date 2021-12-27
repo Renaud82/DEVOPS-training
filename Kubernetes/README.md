@@ -1,5 +1,10 @@
-# Installation
-## Install Minikube CentOS
+# Table of contents
+1. [Installation](#installation)
+2. [Storage](#storage)
+
+
+# Installation <a name="installation"></a>
+## Install Minikube CentOS 
 ```sh
 #!/bin/bash
 sudo yum -y update
@@ -61,7 +66,7 @@ kubectl get ns
 kubectl get po -n ingress-nginx
 ```
 
-# Storage
+# Storage <a name="storage"></a>
 ## Volumes
 ```yaml
 spec:

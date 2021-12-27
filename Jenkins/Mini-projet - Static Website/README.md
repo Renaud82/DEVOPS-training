@@ -1,13 +1,22 @@
 # Mini Projet JENKINS - Static Website
 
 # Table des matières
-I. [Installation](#install)
-II. [Build Image](#docker)
-III. [Pipeline](#pipeline)
-IV. [Ajout de plugin au Pipeline](#pugin)
+I. [Installation](#install)<br />
+&nbsp;&nbsp;&nbsp;A. [Création d’une machine cloud ec2](#ec2)<br />
+&nbsp;&nbsp;&nbsp;B. [Installation de Jenkins et dépendances](#jenkins)<br />
+II. [Build Image](#docker)<br />
+III. [Pipeline](#pipeline)<br />
+&nbsp;&nbsp;&nbsp;A. [Création des credentials](#credential)<br />
+&nbsp;&nbsp;&nbsp;B. [Création du pipeline](#pipelinecreation)<br />
+&nbsp;&nbsp;&nbsp;C. [Lancement du pipeline](#pipelinelaunch)<br />
+IV. [Ajout de plugin au Pipeline](#pugin)<br />
+&nbsp;&nbsp;&nbsp;A. [Trigger GitHub](#trigger)<br />
+&nbsp;&nbsp;&nbsp;B. [Embeddable Build Status](#embeddable)<br />
+&nbsp;&nbsp;&nbsp;C. [Slack notification](#slack)<br />
+&nbsp;&nbsp;&nbsp;D. [Test du pipeline](#test)<br />
 
 ## I- Installation <a name="install"></a>
-### A – Création d’une machine cloud ec2 (renaud-ec2-prod)
+### A – Création d’une machine cloud ec2 (renaud-ec2-prod) <a name="ec2"></a>
 ![screenshot001](./images/IMG-001.png)
 ![screenshot002](./images/IMG-002.png)
 ![screenshot003](./images/IMG-003.png)
@@ -17,7 +26,7 @@ IV. [Ajout de plugin au Pipeline](#pugin)
 ![screenshot007](./images/IMG-007.png)
 ![screenshot008](./images/IMG-008.png)
 
-### B- Installation de Jenkins et dépendances
+### B- Installation de Jenkins et dépendances <a name="jenkins"></a>
 
 * Update :
 ```sh
@@ -151,7 +160,7 @@ ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
 ```
 
 ## III- Pipeline <a name="pipeline"></a>
-### A – Création des crédential
+### A – Création des credentials  <a name="credential"></a>
 
 * dockerHub (dockerhub_password) :
 ![screenshot013](./images/IMG-013.png)
@@ -161,7 +170,7 @@ ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
 ![screenshot015](./images/IMG-015.png)
 ![screenshot016](./images/IMG-016.png)
  
-### B – Création du pipeline
+### B – Création du pipeline <a name="pipelinecreation"></a>
 
 ![screenshot017](./images/IMG-017.png)
 
@@ -289,7 +298,7 @@ pipeline {
 }
 ```
 
-### C – Lancement du pipeline
+### C – Lancement du pipeline <a name="pipelinelaunch"></a>
 
 * En attente de validation pour la production :
 ![screenshot021](./images/IMG-021.png)
@@ -307,7 +316,7 @@ pipeline {
 
 ## IV- Ajout de plugin au Pipeline <a name="pugin"></a>
 
-### A – Trigger GitHub
+### A – Trigger GitHub <a name="trigger"></a>
 
 ![screenshot026](./images/IMG-026.png)
 ![screenshot027](./images/IMG-027.png)
@@ -316,7 +325,7 @@ pipeline {
 ![screenshot028](./images/IMG-028.png)
  
 
-### B – Embeddable Build Status
+### B – Embeddable Build Status <a name="embeddable"></a>
 
 ![screenshot029](./images/IMG-029.png)
 
@@ -333,7 +342,8 @@ pipeline {
 
 <br />
 
-### C – Slack notification
+### C – Slack notification <a name="slack"></a>
+
 ![screenshot033](./images/IMG-033.png)
  
 
@@ -363,7 +373,7 @@ pipeline {
 ```
 <br />
 
-### D – TEST du pipeline
+### D – Test du pipeline <a name="test"></a>
 
 * Modification du fichier Index.html
 ![screenshot041](./images/IMG-041.png)

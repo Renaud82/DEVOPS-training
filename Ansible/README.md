@@ -69,13 +69,14 @@ worker02: 172.31.93.193
 
 ```sh
 sudo apt-get install sshpass -y
+
 vi hosts
 ```
 **hosts:**
 ```sh
 172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
-
+<br />
 ```sh
 ansible -i hosts all -m ping
 ------------
@@ -122,6 +123,7 @@ vi hosts
 ```sh
 worker01 ansible_host=172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
+<br />
 ```sh
 ansible -i hosts all -m ping
 ------------
@@ -159,7 +161,7 @@ vi hosts
 worker01 ansible_host=172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 worker02 ansible_host=172.31.93.193 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
-
+<br />
 ```sh
 ansible -i hosts all -m ping
 ------------
@@ -233,6 +235,7 @@ all:
       ansible_password: ubuntu
       ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 ```
+<br />
 ```sh
 ansible -i hosts.yaml -m ping all
 ```
@@ -268,6 +271,7 @@ all:
       ansible_password: ubuntu
       ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 ```
+<br />
 ```sh
 ansible -i hosts.yaml all -m debug -a "msg= {{  env }} "
 ------------

@@ -257,37 +257,6 @@ ansible -i hosts.yaml all -m setup | grep ansible_distribution
 ```
 
 ```sh
-vi hosts.yaml
-```
-**hosts.yaml:**
-```yaml
-all:
-  hosts:
-    worker01:
-      ansible_host: 172.31.82.253
-      ansible_user: ubuntu
-      ansible_password: ubuntu
-      ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-      env: 'prod'
-    worker02:
-      ansible_host: 172.31.93.193
-      ansible_user: ubuntu
-      ansible_password: ubuntu
-      ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-```
-<br />
-
-```sh
-ansible -i hosts.yaml all -m debug -a "msg= {{  env }} "
-------------
-worker02 | FAILED! => {
-    "msg": "The task includes an option with an undefined variable. The error was: 'env' is undefined. 'env' is undefined"
-}
-worker01 | SUCCESS => {
-    "msg": "prod"
-}
-------------
-
 #Récupérartion des variables de nos environnement
 ansible-inventory -i hosts.yaml --list
 ansible-inventory -i hosts.yaml --host worker01
@@ -311,18 +280,14 @@ vi hosts.ini
 ansible_user=ubuntu
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
-[worker01]
-rec-worker01 ansible_host=172.31.82.253
+[ansible]
+localhost ansible_connection=local
 
-[worker02]
-rec-worker02 ansible_host=172.31.93.193
-
-[prod:children]
-worker01
-worker02
+[prod]
+worker01 ansible_host=172.31.82.253 ansible_password=ubuntu
+worker02 ansible_host=172.31.93.193 ansible_password=ubuntu
 
 [prod:vars]
-ansible_password=ubuntu
 env=prod
 ```
 <br />
@@ -337,6 +302,139 @@ ansible -i hosts.ini -m ping all
 ansible -i hosts.yaml -m ping all
 ansible -i hosts.json -m ping all
 ```
+<br />
+
+```sh
+vi host.yaml
+```
+**host.yaml**
+```yaml
+all:
+  children:
+    ansible:
+      hosts:
+        localhost:
+          ansible_connection: local
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ansible_user: ubuntu
+    prod:
+      hosts:
+        worker01:
+          ansible_host: 172.31.82.253
+          ansible_password: ubuntu
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ansible_user: ubuntu
+          env: prod
+        worker02:
+          ansible_host: 172.31.93.193
+          ansible_password: ubuntu
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ansible_user: ubuntu
+          env: prod
+    ungrouped: {}
+```
+
+
+****
+TP 7 (surcharge)
+****
+
+```sh
+ansible -i hosts.yaml all -m debug -a "msg={{  env }} "
+------------
+localhost | FAILED! => {
+    "msg": "The task includes an option with an undefined variable. The error was: 'env' is undefined. 'env' is undefined"
+}
+worker01 | SUCCESS => {
+    "msg": "prod"
+}
+worker02 | SUCCESS => {
+    "msg": "prod"
+}
+------------
+```
+
+<br/>
+
+* Surcharge avec group_vars
+
+```sh
+mkdir group_vars
+vi group_vars/prod.yaml        =>   env: test_prod
+
+ansible -i hosts.ini all -m debug -a "msg={{  env }} "
+------------
+localhost | FAILED! => {
+    "msg": "The task includes an option with an undefined variable. The error was: 'env' is undefined. 'env' is undefined"
+}
+worker02 | SUCCESS => {
+    "msg": "test_prod"
+}
+worker01 | SUCCESS => {
+    "msg": "test_prod"
+}
+------------
+```
+<br />
+
+* Surcharge avec host_vars
+
+```sh
+mkdir host_vars
+
+vi host_vars/worker01.yaml      =>   env: test_prod_W1
+
+ansible -i hosts.ini all -m debug -a "msg={{  env }} "
+------------
+localhost | FAILED! => {
+    "msg": "The task includes an option with an undefined variable. The error was: 'env' is undefined. 'env' is undefined"
+}
+worker01 | SUCCESS => {
+    "msg": "test_prod_W1"
+}
+worker02 | SUCCESS => {
+    "msg": "test_prod"
+}
+------------
+```
+
+```sh
+vi host_vars/localhost.yaml         =>   env: test_prod_local
+
+ansible -i hosts.ini all -m debug -a "msg={{  env }} "
+------------
+localhost | SUCCESS => {
+    "msg": "test_prod_local"
+}
+worker01 | SUCCESS => {
+    "msg": "test_prod_W1"
+}
+worker02 | SUCCESS => {
+    "msg": "test_prod"
+}
+------------
+```
+<br />
+
+* Surcharger en utilisant le parameter –e
+```sh
+ansible -i hosts.ini all -m debug -a "msg={{  env }} " -e env=surcharge
+------------
+localhost | SUCCESS => {
+    "msg": "surcharge"
+}
+worker02 | SUCCESS => {
+    "msg": "surcharge"
+}
+worker01 | SUCCESS => {
+    "msg": "surcharge"
+}
+------------
+```
+
+
+
+
 
 
 

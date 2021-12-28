@@ -1,6 +1,6 @@
 # Mini Projet JENKINS - Static Website
 
-# Table des matières
+### Table des matières
 I. [Installation](#install)<br />
 &nbsp;&nbsp;&nbsp;A. [Création d’une machine cloud ec2](#ec2)<br />
 &nbsp;&nbsp;&nbsp;B. [Installation de Jenkins et dépendances](#jenkins)<br />

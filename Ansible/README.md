@@ -77,6 +77,7 @@ vi hosts
 172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
 <br />
+
 ```sh
 ansible -i hosts all -m ping
 ------------
@@ -124,6 +125,7 @@ vi hosts
 worker01 ansible_host=172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
 <br />
+
 ```sh
 ansible -i hosts all -m ping
 ------------
@@ -162,6 +164,7 @@ worker01 ansible_host=172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu 
 worker02 ansible_host=172.31.93.193 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
 <br />
+
 ```sh
 ansible -i hosts all -m ping
 ------------
@@ -214,7 +217,7 @@ ps -ef | grep apache2
 ### E – Inventaire au format yaml
 
 ****
-TP 4a
+TP 4
 ****
 ```sh
 vi hosts.yaml
@@ -236,6 +239,7 @@ all:
       ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 ```
 <br />
+
 ```sh
 ansible -i hosts.yaml -m ping all
 ```
@@ -243,7 +247,7 @@ ansible -i hosts.yaml -m ping all
 ### E – Module Setup
 
 ****
-TP 4b
+TP 5
 ****
 
 ```sh
@@ -272,6 +276,7 @@ all:
       ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 ```
 <br />
+
 ```sh
 ansible -i hosts.yaml all -m debug -a "msg= {{  env }} "
 ------------
@@ -282,12 +287,59 @@ worker01 | SUCCESS => {
     "msg": "prod"
 }
 ------------
+
+#Récupérartion des variables de nos environnement
+ansible-inventory -i hosts.yaml --list
+ansible-inventory -i hosts.yaml --host worker01
+#Format yaml
+ansible-inventory -i hosts.yaml --host worker01 -y
 ```
 
 
-### F – Module Setup
+### F – Inventaire et variables 
 
 ****
-TP 5
+TP 6
 ****
+
+```sh
+vi hosts.ini
+```
+**hosts.ini:**
+```ini
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+[worker01]
+rec-worker01 ansible_host=172.31.82.253
+
+[worker02]
+rec-worker02 ansible_host=172.31.93.193
+
+[prod:children]
+worker01
+worker02
+
+[prod:vars]
+ansible_password=ubuntu
+env=prod
+```
+<br />
+
+```sh
+#Format yaml
+ansible-inventory -i hosts.ini --list -y > hosts.yaml
+#Format json
+ansible-inventory -i hosts.ini --list > hosts.json
+#test
+ansible -i hosts.ini -m ping all
+ansible -i hosts.yaml -m ping all
+ansible -i hosts.json -m ping all
+```
+
+
+
+
+
 

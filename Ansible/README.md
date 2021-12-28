@@ -36,9 +36,9 @@ python3 --version
 sudo apt-get -y update
 sudo apt-get -y install python3-pip
 sudo pip3 install ansible
+
 ansible --version
-```
-```sh
+------------
 ansible [core 2.12.1]
   config file = None
   configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
@@ -48,6 +48,7 @@ ansible [core 2.12.1]
   python version = 3.8.10 (default, Nov 26 2021, 20:14:08) [GCC 9.3.0]
   jinja version = 2.10.1
   libyaml = True
+------------
 ```
 
 * Utilisation du gestionnaire de packets
@@ -70,6 +71,7 @@ worker02: 172.31.93.193
 sudo apt-get install sshpass -y
 vi hosts
 ```
+**hosts:**
 ```sh
 172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
@@ -116,12 +118,13 @@ ansible -i hosts all -m ping
 ```sh
 vi hosts
 ```
+**hosts:**
 ```sh
 worker01 ansible_host=172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
 ```sh
 ansible -i hosts all -m ping
-
+------------
 worker01 | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/bin/python3"
@@ -129,6 +132,7 @@ worker01 | SUCCESS => {
     "changed": false,
     "ping": "pong"
 }
+------------
 ```
 
 ### D – Module Copy
@@ -150,6 +154,7 @@ TP3
 ```sh
 vi hosts
 ```
+**hosts:**
 ```sh
 worker01 ansible_host=172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 worker02 ansible_host=172.31.93.193 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
@@ -209,7 +214,10 @@ ps -ef | grep apache2
 ****
 TP 4a
 ****
-
+```sh
+vi hosts.yaml
+```
+**hosts.yaml:**
 ```yaml
 all:
   hosts:
@@ -244,6 +252,7 @@ ansible -i hosts.yaml all -m setup | grep ansible_distribution
 ```sh
 vi hosts.yaml
 ```
+**hosts.yaml:**
 ```yaml
 all:
   hosts:

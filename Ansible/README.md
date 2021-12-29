@@ -18,7 +18,9 @@ III. [Playbook](#playbook)<br />
 
 
 ## I- Installation <a name="install"></a>
-### A – Création d’une machine cloud ec2 (renaud-ec2-prod) A
+
+### A – Création d’une machine cloud ec2 (renaud-ec2-prod) <a name="ec2"></a>
+
 ![screenshot001](./images/IMG-001.png)
 3 machines AWS
 

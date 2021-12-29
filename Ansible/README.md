@@ -12,8 +12,8 @@ II. [Manifest](#manifest)<br />
 &nbsp;&nbsp;&nbsp;E. [Module setup](#setup)<br />
 &nbsp;&nbsp;&nbsp;F. [Inventaire et variables](#variable)<br />
 III. [Playbook](#playbook)<br />
-&nbsp;&nbsp;&nbsp;A. [Utilisation du playbook(#useplaybook)<br />
-&nbsp;&nbsp;&nbsp;B. [Templating Jinga(#jinja)<br />
+&nbsp;&nbsp;&nbsp;A. [Utilisation du playbook](#useplaybook)<br />
+&nbsp;&nbsp;&nbsp;B. [Templating Jinga](#jinja)<br />
 
 
 

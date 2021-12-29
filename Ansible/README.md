@@ -3,22 +3,24 @@
 ### Table des matières
 I. [Installation](#install)<br />
 &nbsp;&nbsp;&nbsp;A. [Création de 3 machines cloud ec2](#ec2)<br />
-&nbsp;&nbsp;&nbsp;B. [Installation ansible via l'outil PIP3 de python](#install)<br />
-II. [Build Image](#docker)<br />
-III. [Pipeline](#pipeline)<br />
+&nbsp;&nbsp;&nbsp;B. [Installation ansible](#ansible)<br />
+II. [Manifest](#manifest)<br />
+&nbsp;&nbsp;&nbsp;A. [Gestion de l'inventaire](#manifest)<br />
+&nbsp;&nbsp;&nbsp;B. [Module Copy](#copy)<br />
+&nbsp;&nbsp;&nbsp;C. [Module Package](#package)<br />
+&nbsp;&nbsp;&nbsp;D. [Inventaire au format yaml](#yaml)<br />
+&nbsp;&nbsp;&nbsp;E. [Module setup](#setup)<br />
+&nbsp;&nbsp;&nbsp;F. [Inventaire et variables](#variable)<br />
+III. [Playbook](#playbook)<br />
 &nbsp;&nbsp;&nbsp;A. [Création des credentials](#credential)<br />
 &nbsp;&nbsp;&nbsp;B. [Création du pipeline](#pipelinecreation)<br />
 &nbsp;&nbsp;&nbsp;C. [Lancement du pipeline](#pipelinelaunch)<br />
-IV. [Ajout de plugin au Pipeline](#pugin)<br />
-&nbsp;&nbsp;&nbsp;A. [Trigger GitHub](#trigger)<br />
-&nbsp;&nbsp;&nbsp;B. [Embeddable Build Status](#embeddable)<br />
-&nbsp;&nbsp;&nbsp;C. [Slack notification](#slack)<br />
-&nbsp;&nbsp;&nbsp;D. [Test du pipeline](#test)<br />
+
 
 ## I- Installation <a name="install"></a>
-### A – Création d’une machine cloud ec2 (renaud-ec2-prod) <a name="ec2"></a>
+### A – Création d’une machine cloud ec2 (renaud-ec2-prod) A
 ![screenshot001](./images/IMG-001.png)
-3 amchines AWS
+3 machines AWS
 
 * Ubuntu (renaud-ec2-master, renaud-ec2-worker01, renaud-ec2-worker02)
 * EC2 : t3.medium, t2.micro (x2)
@@ -27,7 +29,7 @@ IV. [Ajout de plugin au Pipeline](#pugin)<br />
 * master: 3.231.223.229 , worker01: 3.91.213.82 , worker02: 3.88.215.129
 
 
-### B – Installation ansible <a name="install"></a>TP1
+### B – Installation ansible <a name="ansible"></a>TP1
 
 * Utilisation de utilitaire pip
 
@@ -50,6 +52,7 @@ ansible [core 2.12.1]
   libyaml = True
 ------------
 ```
+<br />
 
 * Utilisation du gestionnaire de packets
 
@@ -60,7 +63,10 @@ sudo apt-get install ansible
 sudo yum install ansible
 ```
 
-### C – Gestion de l'inventaire
+
+## II- Manifest <a name="manifest"></a>
+
+### A – Gestion de l'inventaire <a name="manifest"></a>
 
 * IP privées
 master: 172.31.6.38
@@ -139,15 +145,13 @@ worker01 | SUCCESS => {
 ------------
 ```
 
-### D – Module Copy
+### B – Module Copy <a name="copy"></a>
 
 ```sh
 ansible -i hosts all -m copy -a "dest=/home/ubuntu/renaud.txt content='Bonjour Renaud'"
 ```
 
-### D – Module Package
-
-
+### C – Module Package <a name="package"></a>
 
 ********
 TP3
@@ -214,7 +218,7 @@ ps -ef | grep nginx
 ps -ef | grep apache2
 ```
 
-### E – Inventaire au format yaml
+### D – Inventaire au format yaml <a name="yaml"></a>
 
 ****
 TP 4
@@ -244,7 +248,7 @@ all:
 ansible -i hosts.yaml -m ping all
 ```
 
-### E – Module Setup
+### E – Module Setup <a name="setup"></a>
 
 ****
 TP 5
@@ -263,9 +267,9 @@ ansible-inventory -i hosts.yaml --host worker01
 #Format yaml
 ansible-inventory -i hosts.yaml --host worker01 -y
 ```
+<br />
 
-
-### F – Inventaire et variables 
+### F – Inventaire et variables <a name="variable"></a>
 
 ****
 TP 6
@@ -432,11 +436,12 @@ worker01 | SUCCESS => {
 ------------
 ```
 
+## III- Playbook <a name="playbook"></a>
 
+```sh
+ansible-playbook
 
-
-
-
+```
 
 
 

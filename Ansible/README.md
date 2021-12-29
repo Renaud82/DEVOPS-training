@@ -12,9 +12,9 @@ II. [Manifest](#manifest)<br />
 &nbsp;&nbsp;&nbsp;E. [Module setup](#setup)<br />
 &nbsp;&nbsp;&nbsp;F. [Inventaire et variables](#variable)<br />
 III. [Playbook](#playbook)<br />
-&nbsp;&nbsp;&nbsp;A. [Création des credentials](#credential)<br />
-&nbsp;&nbsp;&nbsp;B. [Création du pipeline](#pipelinecreation)<br />
-&nbsp;&nbsp;&nbsp;C. [Lancement du pipeline](#pipelinelaunch)<br />
+&nbsp;&nbsp;&nbsp;A. [Utilisation du playbook(#useplaybook)<br />
+&nbsp;&nbsp;&nbsp;B. [Templating Jinga(#jinja)<br />
+
 
 
 ## I- Installation <a name="install"></a>
@@ -440,12 +440,10 @@ worker01 | SUCCESS => {
 
 ## III- Playbook <a name="playbook"></a>
 
+### A – Utilisation du playbook <a name="useplaybook"></a>
 ****
 TP 8 (Déployez un serveur web)
 ****
-
-
-
 
 ```sh
 #Install de l'outil de validation du playbook
@@ -461,10 +459,13 @@ vi prod.yaml
 all:
   children:
     prod:
+      vars:
+        env: production
       hosts:
         worker01:
           ansible_host: 172.31.82.253
-          env: prod
+        worker02:
+          ansible_host: 172.31.93.193
 ```
 
 <br />
@@ -475,6 +476,7 @@ vi group_vars/prod.yaml
 ```
 **prod.yaml**
 ```yaml
+env: prod
 ansible_user: ubuntu
 ansible_password: ubuntu
 ansible_ssh_common_args: -o StrictHostKeyChecking=no
@@ -490,21 +492,25 @@ vi nginx.yaml
 ```yaml
 - name: "install webserver"
   become: yes
-  hosts: prod
+  hosts: worker01
+  pre_tasks:
+    - name: "Test debug env var"
+      debug:
+        msg: "{{ env }}"
   tasks:
     - name: "install nginx"
-      package: 
+      package:
         name: nginx
         state: present
     - name: "start nginx"
-      service: 
+      service:
         name: nginx
         state: started
         enabled: yes
     - name: "copy file"
       copy:
         src: "index.html"
-        dest: "/var/www/html"    
+        dest: "/var/www/html"
 ```
 <br />
 
@@ -513,8 +519,34 @@ ansible-playbook -i prod.yaml nginx.yaml
 
 ansible-lint nginx.yaml
 ```
+<br />
 
+* Désinstallation du webserver
 
+```sh
+vi unnginx.yaml
+```
+**unnginx.yaml**
+```yaml
+- name: "uninstall webserver"
+  become: yes
+  hosts: prod
+  tasks:
+    - name: "Test debug env var"
+      debug:
+        msg: "{{ env }}"
+    - name: "uninstall nginx"
+      package: 
+        name: nginx
+        state: absent
+        purge: yes
+        autoremove: yes
+```
+
+### B – Templating Jinga <a name="jinja"></a>
+****
+TP 9 (Jinga)
+****
 
 
 

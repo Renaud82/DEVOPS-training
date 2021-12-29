@@ -440,10 +440,83 @@ worker01 | SUCCESS => {
 
 ## III- Playbook <a name="playbook"></a>
 
-```sh
-ansible-playbook
+****
+TP 8 (Déployez un serveur web)
+****
 
+
+
+
+```sh
+#Install de l'outil de validation du playbook
+sudo apt-get -y install ansible-lint
+
+mkdir webapp
+cd webapp/
+
+vi prod.yaml
 ```
+**prod.yaml**
+```yaml
+all:
+  children:
+    prod:
+      hosts:
+        worker01:
+          ansible_host: 172.31.82.253
+          env: prod
+```
+
+<br />
+
+```sh
+mkdir group_vars
+vi group_vars/prod.yaml
+```
+**prod.yaml**
+```yaml
+ansible_user: ubuntu
+ansible_password: ubuntu
+ansible_ssh_common_args: -o StrictHostKeyChecking=no
+```
+<br />
+
+```sh
+echo "Bonjour Renaud" > index.html
+
+vi nginx.yaml
+```
+**nginx.yaml**
+```yaml
+- name: "install webserver"
+  become: yes
+  hosts: prod
+  tasks:
+    - name: "install nginx"
+      package: 
+        name: nginx
+        state: present
+    - name: "start nginx"
+      service: 
+        name: nginx
+        state: started
+        enabled: yes
+    - name: "copy file"
+      copy:
+        src: "index.html"
+        dest: "/var/www/html"    
+```
+<br />
+
+```sh
+ansible-playbook -i prod.yaml nginx.yaml
+
+ansible-lint nginx.yaml
+```
+
+
+
+
 
 
 

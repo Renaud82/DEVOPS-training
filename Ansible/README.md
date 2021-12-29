@@ -29,7 +29,7 @@ III. [Playbook](#playbook)<br />
 * master: 3.231.223.229 , worker01: 3.91.213.82 , worker02: 3.88.215.129
 
 
-### B – Installation ansible <a name="ansible"></a>TP1
+### B – Installation ansible <a name="ansible"></a>
 
 * Utilisation de utilitaire pip
 

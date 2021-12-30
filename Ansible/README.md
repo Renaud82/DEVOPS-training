@@ -545,8 +545,238 @@ vi unnginx.yaml
 
 ### B – Templating Jinga <a name="jinja"></a>
 ****
-TP 9 (Jinga)
+TP 9 (Jinga) 
 ****
+
+```sh
+mkdir jinga
+cd jinga
+
+mkdir group_vars
+vi group_vars/prod.yaml
+```
+**prod.yaml**
+```yaml
+env: prod
+ansible_user: ubuntu
+ansible_password: ubuntu
+ansible_ssh_common_args: -o StrictHostKeyChecking=no
+```
+<br />
+
+```sh
+vi hosts.yaml
+```
+**hosts.yaml**
+```yaml
+all:
+  children:
+    prod:
+      vars:
+        env: production
+      hosts:
+        worker01:
+          ansible_host: 172.31.82.253
+        worker02:
+          ansible_host: 172.31.93.193
+```
+
+<br />
+
+```sh
+mkdir template
+
+vi template/install_nginx.sh.j2
+```
+**install_nginx.sh.j2**
+```sh
+#!/bin/bash
+{% if ansible_distribution == "Ubuntu" -%}
+apt-get -y install {{ app }}
+{% elif ansible_distribution == "Centos" -%}
+yum -y install {{ app }}
+{% else -%}
+{% endif %}
+systemctl start {{ app }}
+systemctl enable {{ app }}
+```
+<br />
+
+```sh
+vi nginx.yaml
+```
+**nginx.yaml**
+```yaml
+- name: "install webserver"
+  become: yes
+  vars:
+    app: nginx
+  hosts: prod
+  pre_tasks:
+    - name: "Test debug env var"
+      debug:
+        msg: "{{ env }}"
+  tasks:
+    - name: "Generate install_nginx"
+      template:
+        src: "./template/install_nginx.sh.j2"
+        dest: "/home/{{ ansible_user }}/install_nginx.sh"
+    - name: "Execute install_nginx"
+      command:
+        cmd: "sh /home/{{ ansible_user }}/install_nginx.sh"
+```
+```sh
+ansible-playbook -i hosts.yaml nginx.yaml 
+```
+<br />
+
+****
+10 (Jinga) 
+****
+* On créer le fichier uninstall_nginx.sh.j2
+```sh
+vi template/uninstall_nginx.sh.j2
+```
+**uninstall_nginx.sh.j2**
+```sh
+#!/bin/bash
+{% if ansible_distribution == "Ubuntu" -%}
+apt-get -y purge --autoremove {{ app }}
+{% elif ansible_distribution == "Centos" -%}
+yum -y purge --autoremove {{ app }}
+{% else -%}
+{% endif %}
+```
+<br />
+
+* On créer le fichier unnginx.yaml
+
+```sh
+vi unnginx.yaml
+```
+**unnginx.yaml**
+```yaml
+- name: "uninstall webserver"
+  become: yes
+  vars:
+    app: nginx
+  hosts: worker02
+  pre_tasks:
+    - name: "Test debug env var"
+      debug:
+        msg: "{{ env }}"
+  tasks:
+    - name: "Generate uninstall_nginx"
+      template:
+        src: "./template/uninstall_nginx.sh.j2"
+        dest: "/home/{{ ansible_user }}/uninstall_nginx.sh"
+    - name: "Execute uninstall_nginx"
+      command:
+        cmd: "sh /home/{{ ansible_user }}/uninstall_nginx.sh"
+```
+```sh
+ansible-playbook -i hosts.yaml unnginx.yaml 
+```
+<br />
+
+****
+TP 11 (Jinga) 
+****
+
+* Modification manuellement des noms de vos serveurs
+```sh
+sudo vi /etc/hosts
+```
+**hosts**
+```sh
+172.31.6.38 AnsibleMaster
+172.31.82.253 AnsibleWorker01
+172.31.93.193 AnsibleWorker02
+```
+
+vi /template/install_app.sh.j2
+**install_app.sh.j2**
+```sh
+#!/bin/bash
+{% if ansible_distribution == "Ubuntu" -%}
+apt-get -y install {{ app }}
+{% elif ansible_distribution == "Centos" -%}
+yum -y install {{ app }}
+{% else -%}
+{% endif %}
+```
+
+```sh
+vi webapp.yaml
+```
+**webapp.yaml**
+```yaml
+- name: "install webserver"
+  become: yes
+  vars:
+    app: nginx
+  hosts: prod
+  pre_tasks:
+    - name: "Test debug env var"
+      debug:
+        msg: "{{ env }}"
+  tasks:
+    - name: "Generate install_nginx"
+      template:
+        src: "./template/install_app.sh.j2"
+        dest: "/home/{{ ansible_user }}/install_{{ app }}.sh"
+    - name: "Execute install_nginx"
+      command:
+        cmd: "sh /home/{{ ansible_user }}/install_{{ app }}.sh"
+    - name: "delete directory"
+      file:
+        path: "/var/www/html"
+        state: absent
+    - name: "create directory"
+      file:
+        path: "/var/www/html"
+        state: directory
+    - name: "Git clone"
+      git:
+        repo: 'https://github.com/diranetafen/static-website-example.git'
+        dest: '/var/www/html'
+    - name: "sed index.html"
+      command:
+        cmd: "sed -i 's/Dimension/Dimension : {{ ansible_hostname }}/' /var/www/html/index.html"
+```
+<br />
+
+
+### C – When et loop <a name="when"></a>
+
+****
+TP 12 (When et loop) 
+****
+```sh
+vi install.yaml
+```
+**install.yaml**
+```yaml
+- name: "install app"
+  become: yes
+  hosts: prod
+  pre_tasks:
+    - name: "Test debug env var"
+      debug:
+        msg: "{{ env }}"
+  tasks:
+    - name: "install app"
+      apt:
+        name: "{{ item }}"
+        state: present
+      when: ansible_distribution == "Ubuntu"
+      loop:
+        - nginx
+        - git
+```
+
+
+### D – Include et Import <a name="include"></a>
 
 
 

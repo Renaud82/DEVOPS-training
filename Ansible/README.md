@@ -1071,15 +1071,12 @@ vi index.yaml
     - name: "create directory"
       file:
         path: "/tmp/html"
-        state: absent
-    - name: "create directory"
-      file:
-        path: "/tmp/html"
         state: directory
     - name: "Git clone"
       git:
         repo: 'https://github.com/diranetafen/static-website-example.git'
         dest: '/tmp/html'
+        force: yes
     - name: "sed index.html"
       command:
         cmd: "sed -i 's/Dimension/Dimension : {{ ansible_hostname }}/' /tmp/html/index.html"

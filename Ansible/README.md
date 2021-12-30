@@ -873,6 +873,7 @@ all:
           ansible_user: ubuntu
           env: prod
 ```
+</details>
 <br />
 
 ```sh

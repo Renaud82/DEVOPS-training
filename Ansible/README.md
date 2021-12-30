@@ -17,6 +17,7 @@ III. [Playbook](#playbook)<br />
 &nbsp;&nbsp;&nbsp;C. [When et loop](#when)<br />
 &nbsp;&nbsp;&nbsp;D. [Include et Import](#include)<br />
 ### E – Import Playbook <a name="iplaybook"></a>
+### F – Docker Module <a name="docker"></a>
 
 
 
@@ -890,19 +891,18 @@ vi docker.yaml
   become: yes
   hosts: prod
   tasks:
-    - name: "install curl"
-      package:
-        name: curl
-        state: present
-    - name: "get install docker"
-      command:
-        cmd: "curl -fsSL https://get.docker.com -o get-docker.sh"
+    - name: "Download Install docker script"
+      get_url:
+        url: "https://get.docker.com"
+        dest: /home/ubuntu/get-docker.sh
     - name: "launch docker"
-      command:
-        cmd: "sh get-docker.sh"
-    - name: "add unbuntu user in docker group"
-      command:
-        cmd: "sudo usermod -aG docker ubuntu"
+      command: "sh /home/ubuntu/get-docker.sh"
+    - name: "Give privilege to ubuntu"
+      user:
+        name: ubuntu
+        append: yes
+        groups:
+          - docker
 ```
 </details>
 <br />
@@ -911,7 +911,6 @@ vi docker.yaml
 ```sh
 vi mario.yaml
 ```
-
 <details>
 <summary><code>mario.yaml</code></summary>
 
@@ -938,10 +937,216 @@ vi deploy_mario.yaml
 
 ```yaml
 ---
-- import_playbook: docker.yaml
-- import_playbook: mario.yaml
+- name: "Install docker"
+  import_playbook: docker.yaml
+
+- name: "Deploy a mario container"
+  import_playbook: mario.yaml
+```
+</details>
+<br />
+
+### F – Docker Module <a name="docker"></a>
+
+* Installation du module docker manuel
+```sh
+sudo apt-get -y install python3-pip
+sudo pip3 install docker-py
+```
+<br />>
+
+* Installation du module docker par ansible
+```sh
+vi docker.yaml
+```
+
+<details>
+<summary><code>docker.yaml</code></summary>
+
+```yaml
+---
+- name: "Install Docker"
+  become: yes
+  hosts: prod
+  tasks:
+    - name: "Download Install docker script"
+      get_url:
+        url: "https://get.docker.com"
+        dest: /home/ubuntu/get-docker.sh
+    - name: "launch docker"
+      command: "sh /home/ubuntu/get-docker.sh"
+    - name: "Give privilege to ubuntu"
+      user:
+        name: ubuntu
+        append: yes
+        groups:
+          - docker
+    - name: install python pip
+      apt:
+        name: python3-pip
+        state: present
+      when: ansible_distribution == "Ubuntu"
+    - name: install docker-py module
+      pip:
+        name: docker-py
+        state: present
+```
+</details>
+<br />
+
+* Utilisation du module docker
+****
+TP 13B (module docker)
+****
+
+```sh
+vi mario.yaml
+```
+<details>
+<summary><code>mario.yaml</code></summary>
+
+```yaml
+---
+- name: "Launch Mario Docker"
+  hosts: prod
+  become: true
+  vars:
+    ansible_sudo_pass: ubuntu
+
+  tasks:
+    - name: "create container mario"
+      docker_container:
+        name: mario
+        image: pengbai/docker-supermario
+        ports:
+          - "8600:8080"
 ```
 </details>
 
 
+****
+TP 14 (module docker)
+****
+```sh
+mkdir webapp2
+cd webapp2
+
+vi hosts.yaml
+```
+<details>
+<summary><code>hosts.yaml</code></summary>
+
+```yaml
+all:
+  children:
+    prod:
+      hosts:
+        worker01:
+          ansible_host: 172.31.82.253
+          ansible_password: ubuntu
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ansible_user: ubuntu
+          env: prod
+        worker02:
+          ansible_host: 172.31.93.193
+          ansible_password: ubuntu
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ansible_user: ubuntu
+          env: prod
+```
+</details>
+<br />
+
+```sh
+vi apache.yaml
+```
+<details>
+<summary><code>apache.yaml</code></summary>
+
+```yaml
+---
+- name: "install webserver"
+  become: yes
+  hosts: prod
+  tasks:
+    - name: "Craeye container apache"
+      docker_container:
+        name: apache
+        image: httpd
+        ports:
+          - "8080:80"
+```
+```sh
+vi index.yaml
+```
+<details>
+<summary><code>index.yaml</code></summary>
+
+```yaml
+- name: "Update index.html"
+  become: yes
+  hosts: prod
+  tasks:
+    - name: "create directory"
+      file:
+        path: "/tmp/html"
+        state: absent
+    - name: "create directory"
+      file:
+        path: "/tmp/html"
+        state: directory
+    - name: "Git clone"
+      git:
+        repo: 'https://github.com/diranetafen/static-website-example.git'
+        dest: '/tmp/html'
+    - name: "sed index.html"
+      command:
+        cmd: "sed -i 's/Dimension/Dimension : {{ ansible_hostname }}/' /tmp/html/index.html"
+```
+
+```sh
+vi puthtml.yaml
+```
+<details>
+<summary><code>puthtml.yaml</code></summary>
+
+```yaml
+- name: "Put code in container"
+  become: yes
+  hosts: prod
+  tasks:
+    - name: "Remove"
+      command:
+        cmd: "docker exec -i apache rm -rf /usr/local/apache2/htdocs/"
+    - name: "Create"
+      command:
+        cmd: "docker exec -i apache mkdir /usr/local/apache2/htdocs/"
+    - name: "Copy"
+      command:
+        cmd: "docker cp /tmp/html/. apache:/usr/local/apache2/htdocs/"
+```
+
+
+<br />
+
+
+```sh
+ vi deploy_webserver.yaml
+```
+
+<details>
+<summary><code>deploy_webserver.yaml</code></summary>
+
+```yaml
+---
+- name: "Install Webservr"
+  import_playbook: apache.yaml
+
+- name: "Update index.html"
+  import_playbook: index.yaml
+
+- name: "Put html"
+  import_playbook: puthtml.yaml
+```
+</details>
 

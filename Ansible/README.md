@@ -711,7 +711,9 @@ yum -y install {{ app }}
 ```sh
 vi webapp.yaml
 ```
-**webapp.yaml**
+<details>
+<code>webapp.yaml</code>
+
 ```yaml
 - name: "install webserver"
   become: yes
@@ -746,6 +748,7 @@ vi webapp.yaml
       command:
         cmd: "sed -i 's/Dimension/Dimension : {{ ansible_hostname }}/' /var/www/html/index.html"
 ```
+</details>
 <br />
 
 

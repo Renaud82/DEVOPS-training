@@ -13,7 +13,7 @@ II. [Manifest](#manifest)<br />
 &nbsp;&nbsp;&nbsp;F. [Inventaire et variables](#variable)<br />
 III. [Playbook](#playbook)<br />
 &nbsp;&nbsp;&nbsp;A. [Utilisation du playbook](#useplaybook)<br />
-&nbsp;&nbsp;&nbsp;B. [Templating Jinga](#jinja)<br />
+&nbsp;&nbsp;&nbsp;B. [Templating Jinja](#jinja)<br />
 &nbsp;&nbsp;&nbsp;C. [When et loop](#when)<br />
 &nbsp;&nbsp;&nbsp;D. [Include et Import](#include)<br />
 
@@ -545,14 +545,14 @@ vi unnginx.yaml
         autoremove: yes
 ```
 
-### B – Templating Jinga <a name="jinja"></a>
+### B – Templating Jinja <a name="jinja"></a>
 ****
-TP 9 (Jinga) 
+TP 9 (Jinja) 
 ****
 
 ```sh
-mkdir jinga
-cd jinga
+mkdir jinja
+cd jinja
 
 mkdir group_vars
 vi group_vars/prod.yaml
@@ -633,7 +633,7 @@ ansible-playbook -i hosts.yaml nginx.yaml
 <br />
 
 ****
-10 (Jinga) 
+TP 10 (Jinja) 
 ****
 * On créer le fichier uninstall_nginx.sh.j2
 ```sh
@@ -682,7 +682,7 @@ ansible-playbook -i hosts.yaml unnginx.yaml
 <br />
 
 ****
-TP 11 (Jinga) 
+TP 11 (Jinja) 
 ****
 
 * Modification manuellement des noms de vos serveurs
@@ -757,7 +757,10 @@ TP 12 (When et loop)
 ```sh
 vi install.yaml
 ```
-**install.yaml**
+
+<details>
+<summary>**install.yaml**</summary>
+
 ```yaml
 - name: "install app"
   become: yes
@@ -776,6 +779,7 @@ vi install.yaml
         - nginx
         - git
 ```
+</details>
 
 
 ### D – Include et Import <a name="include"></a>

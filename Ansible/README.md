@@ -845,7 +845,7 @@ ansible-playbook -i prod.yaml main.yaml
 ****
 TP 13B (deploiement docker)
 ****
-
+* Fichier d'inventaire
 ```sh
 mkdir TP_mario
 
@@ -876,6 +876,7 @@ all:
 </details>
 <br />
 
+* Fichier d'installation de Docker
 ```sh
 vi docker.yaml
 ```
@@ -906,6 +907,7 @@ vi docker.yaml
 </details>
 <br />
 
+* Fichier de lancement du conteneur Mario
 ```sh
 vi mario.yaml
 ```
@@ -926,6 +928,7 @@ vi mario.yaml
 </details>
 <br />
 
+* Fichier de deploiement de l'application Mario
 ```sh
 vi deploy_mario.yaml
 ```

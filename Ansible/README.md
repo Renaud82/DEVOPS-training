@@ -1076,6 +1076,9 @@ vi apache.yaml
         ports:
           - "8080:80"
 ```
+</details>
+<br />
+
 ```sh
 vi index.yaml
 ```
@@ -1103,6 +1106,8 @@ vi index.yaml
       command:
         cmd: "sed -i 's/Dimension/Dimension : {{ ansible_hostname }}/' /tmp/html/index.html"
 ```
+</details>
+<br />
 
 ```sh
 vi puthtml.yaml
@@ -1125,7 +1130,7 @@ vi puthtml.yaml
       command:
         cmd: "docker cp /tmp/html/. apache:/usr/local/apache2/htdocs/"
 ```
-
+</details>
 
 <br />
 

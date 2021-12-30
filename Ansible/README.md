@@ -16,6 +16,7 @@ III. [Playbook](#playbook)<br />
 &nbsp;&nbsp;&nbsp;B. [Templating Jinja](#jinja)<br />
 &nbsp;&nbsp;&nbsp;C. [When et loop](#when)<br />
 &nbsp;&nbsp;&nbsp;D. [Include et Import](#include)<br />
+### E – Import Playbook <a name="iplaybook"></a>
 
 
 
@@ -712,9 +713,10 @@ yum -y install {{ app }}
 vi webapp.yaml
 ```
 <details>
-<code>webapp.yaml</code>
+<summary><code>webapp.yaml</code></summary>
 
 ```yaml
+---
 - name: "install webserver"
   become: yes
   vars:
@@ -765,6 +767,7 @@ vi install.yaml
 <summary><code>install.yaml</code></summary>
 
 ```yaml
+---
 - name: "install app"
   become: yes
   hosts: prod
@@ -785,10 +788,156 @@ vi install.yaml
 </details>
 
 
-### D – Include et Import <a name="include"></a>
+### D – Include/Import et TAG <a name="include"></a>
 
+****
+TP 13A
+****
+```sh
+vi install.yaml
+```
 
+<details>
+<summary><code>install.yaml</code></summary>
 
+```yaml
+---
+- name: "install app"
+  apt:
+    name: "{{ item }}"
+    state: present
+```
+</details>
+
+<br />
+
+```sh
+vi main.yaml
+```
+
+<details>
+<summary><code>main.yaml</code></summary>
+
+```yaml
+---
+- name: "install Nginx and Git"
+  become: yes
+  hosts: prod
+  pre_tasks:
+    - name: "Test debug env var"
+      debug:
+        msg: "{{ env }}"
+  tasks:
+    - include_tasks: /home/ubuntu/webapp/install.yaml
+      when: ansible_distribution == "Ubuntu"
+      with_items:
+        - nginx
+        - git
+```
+</details>
+
+```sh
+ansible-playbook -i prod.yaml main.yaml
+```
+
+### E – Import Playbook <a name="iplaybook"></a>
+
+****
+TP 13B (deploiement docker)
+****
+
+```sh
+mkdir TP_mario
+
+vi hosts.yaml
+```
+
+<details>
+<summary><code>hosts.yaml</code></summary>
+
+```yaml
+all:
+  children:
+    prod:
+      hosts:
+        worker01:
+          ansible_host: 172.31.82.253
+          ansible_password: ubuntu
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ansible_user: ubuntu
+          env: prod
+        worker02:
+          ansible_host: 172.31.93.193
+          ansible_password: ubuntu
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ansible_user: ubuntu
+          env: prod
+```
+<br />
+
+```sh
+vi docker.yaml
+```
+
+<details>
+<summary><code>docker.yaml</code></summary>
+
+```yaml
+---
+- name: "Install Docker"
+  become: yes
+  hosts: prod
+  tasks:
+    - name: "install curl"
+      package:
+        name: curl
+        state: present
+    - name: "get install docker"
+      command:
+        cmd: "curl -fsSL https://get.docker.com -o get-docker.sh"
+    - name: "launch docker"
+      command:
+        cmd: "sh get-docker.sh"
+    - name: "add unbuntu user in docker group"
+      command:
+        cmd: "sudo usermod -aG docker ubuntu"
+```
+</details>
+<br />
+
+```sh
+vi mario.yaml
+```
+
+<details>
+<summary><code>mario.yaml</code></summary>
+
+```yaml
+---
+- name: "Launch Mario Docker"
+  become: yes
+  hosts: prod
+  tasks:
+    - name: "Mario"
+      command:
+        cmd: "docker run -d -p 8600:8080 pengbai/docker-supermario"
+```
+</details>
+<br />
+
+```sh
+vi deploy_mario.yaml
+```
+
+<details>
+<summary><code>deploy_mario.yaml</code></summary>
+
+```yaml
+---
+- import_playbook: docker.yaml
+- import_playbook: mario.yaml
+```
+</details>
 
 
 

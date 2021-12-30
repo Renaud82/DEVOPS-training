@@ -1058,28 +1058,6 @@ all:
 <br />
 
 ```sh
-vi apache.yaml
-```
-<details>
-<summary><code>apache.yaml</code></summary>
-
-```yaml
----
-- name: "install webserver"
-  become: yes
-  hosts: prod
-  tasks:
-    - name: "Craeye container apache"
-      docker_container:
-        name: apache
-        image: httpd
-        ports:
-          - "8080:80"
-```
-</details>
-<br />
-
-```sh
 vi index.yaml
 ```
 <details>
@@ -1110,30 +1088,28 @@ vi index.yaml
 <br />
 
 ```sh
-vi puthtml.yaml
+vi apache.yaml
 ```
 <details>
-<summary><code>puthtml.yaml</code></summary>
+<summary><code>apache.yaml</code></summary>
 
 ```yaml
-- name: "Put code in container"
+---
+- name: "install webserver"
   become: yes
   hosts: prod
   tasks:
-    - name: "Remove"
-      command:
-        cmd: "docker exec -i apache rm -rf /usr/local/apache2/htdocs/"
-    - name: "Create"
-      command:
-        cmd: "docker exec -i apache mkdir /usr/local/apache2/htdocs/"
-    - name: "Copy"
-      command:
-        cmd: "docker cp /tmp/html/. apache:/usr/local/apache2/htdocs/"
+    - name: "Create container apache"
+      docker_container:
+        name: apache
+        image: httpd
+        ports:
+          - "8080:80"
+        volumes:
+          - "/tmp/html/:/usr/local/apache2/htdocs/"
 ```
 </details>
-
 <br />
-
 
 ```sh
  vi deploy_webserver.yaml
@@ -1144,14 +1120,11 @@ vi puthtml.yaml
 
 ```yaml
 ---
-- name: "Install Webservr"
-  import_playbook: apache.yaml
-
 - name: "Update index.html"
   import_playbook: index.yaml
-
-- name: "Put html"
-  import_playbook: puthtml.yaml
+  
+- name: "Install Webservr"
+  import_playbook: apache.yaml
 ```
 </details>
 

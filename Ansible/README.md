@@ -759,7 +759,7 @@ vi install.yaml
 ```
 
 <details>
-<summary>**install.yaml**</summary>
+**<summary>install.yaml</summary>**
 
 ```yaml
 - name: "install app"

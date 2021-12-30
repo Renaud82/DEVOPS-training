@@ -14,6 +14,8 @@ II. [Manifest](#manifest)<br />
 III. [Playbook](#playbook)<br />
 &nbsp;&nbsp;&nbsp;A. [Utilisation du playbook](#useplaybook)<br />
 &nbsp;&nbsp;&nbsp;B. [Templating Jinga](#jinja)<br />
+&nbsp;&nbsp;&nbsp;C. [When et loop](#when)<br />
+&nbsp;&nbsp;&nbsp;D. [Include et Import](#include)<br />
 
 
 

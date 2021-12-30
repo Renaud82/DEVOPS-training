@@ -1125,3 +1125,70 @@ vi apache.yaml
 ```
 </details>
 
+
+
+CONNEXION SSH
+
+vi reno_key.pem
+
+chmod 400 reno_key.pem 
+
+on rétire les user et password de hosts.yaml
+
+```yaml
+all:
+  children:
+    prod:
+      hosts:
+        worker01:
+          ansible_host: 172.31.82.253
+          env: prod
+        worker02:
+          ansible_host: 172.31.93.193
+          env: prod
+```
+
+```sh
+ansible -i hosts.yaml -m ping all
+```
+<details>
+<summary><code>résultat</code></summary>
+```sh
+worker01 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: ubuntu@172.31.82.253: Permission denied (publickey,password).",
+    "unreachable": true
+}
+worker02 | UNREACHABLE! => {
+    "changed": false,
+    "msg": "Failed to connect to the host via ssh: ubuntu@172.31.93.193: Permission denied (publickey,password).",
+    "unreachable": true
+}
+```
+</detail>
+<br />
+
+```sh
+ansible -i hosts.yaml --private-key ../reno_key.pem -m ping all
+```
+<details>
+<summary><code>résultat</code></summary>
+```sh
+worker01 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+worker02 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+```
+</details>
+
+

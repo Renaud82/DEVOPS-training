@@ -1153,6 +1153,7 @@ ansible -i hosts.yaml -m ping all
 ```
 <details>
 <summary><code>résultat</code></summary>
+
 ```sh
 worker01 | UNREACHABLE! => {
     "changed": false,
@@ -1173,6 +1174,7 @@ ansible -i hosts.yaml --private-key ../reno_key.pem -m ping all
 ```
 <details>
 <summary><code>résultat</code></summary>
+
 ```sh
 worker01 | SUCCESS => {
     "ansible_facts": {

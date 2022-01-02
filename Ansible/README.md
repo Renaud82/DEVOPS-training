@@ -5,7 +5,7 @@ I. [Installation](#install)<br />
 &nbsp;&nbsp;&nbsp;A. [Création de 3 machines cloud ec2](#ec2)<br />
 &nbsp;&nbsp;&nbsp;B. [Installation ansible](#ansible)<br />
 II. [Manifest](#manifest)<br />
-&nbsp;&nbsp;&nbsp;A. [Connexion aux workers](#ping)<br />
+&nbsp;&nbsp;&nbsp;A. [Connexion aux workers (inventaire)](#ping)<br />
 &nbsp;&nbsp;&nbsp;B. [Module Copy](#copy)<br />
 &nbsp;&nbsp;&nbsp;C. [Module Package](#package)<br />
 &nbsp;&nbsp;&nbsp;D. [Inventaire au format yaml](#yaml)<br />
@@ -77,15 +77,18 @@ sudo yum install ansible
 
 ## II- Manifest <a name="manifest"></a>
 
-### A – Connexion aux workers <a name="ping"></a>
+### A – Connexion aux workers (inventaire) <a name="ping"></a>
 
-* IP privées
+* Création de l'inventaire
+
 master: 172.31.6.38
+
 worker01: 172.31.82.253
+
 worker02: 172.31.93.193
 
 ```sh
-vi /etc/hosts
+vi hosts
 ```
 <details>
 <summary><code>hosts</code></summary>
@@ -158,7 +161,7 @@ ansible -i hosts all -m ping
 * Modification du hosts
 
 ```sh
-vi /etc/hosts
+vi hosts
 ```
 <details>
 <summary><code>hosts</code></summary>
@@ -188,34 +191,42 @@ worker01 | SUCCESS => {
 <br />
 
 ### B – Module Copy <a name="copy"></a>
+<br />
 
+* Copie d'un fichier avec contenu
 ```sh
 ansible -i hosts all -m copy -a "dest=/home/ubuntu/renaud.txt content='Bonjour Renaud'"
 ```
-![screenshot002](./images/IMG-002.png =100x20)
+![screenshot002](./images/IMG-002.png)
 <br />
 
 ### C – Module Package <a name="package"></a>
 
-********
-TP3
-********
+<br />
 
-* Inventaire
+* Ajout du deuxième worker dans l'inventaire
 
 ```sh
 vi hosts
 ```
-**hosts:**
+<details>
+<summary><code>host</code></summary>
+
 ```sh
 worker01 ansible_host=172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 worker02 ansible_host=172.31.93.193 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
+</details>
 <br />
 
+* Test de la connextion aux deux workers
 ```sh
 ansible -i hosts all -m ping
-------------
+```
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
 worker01 | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/bin/python3"
@@ -230,10 +241,11 @@ worker02 | SUCCESS => {
     "changed": false,
     "ping": "pong"
 }
-------------
 ```
+</details>
+<br />
 
-* Installation
+* Installation du package nging sur les workers
 
 ```sh
 ansible -i hosts -b -m package -a "name=nginx state=present" worker01
@@ -243,8 +255,10 @@ ansible -i hosts -b -m package -a "name=apache2 state=present" worker02
 ansible -i hosts -b -m service -a "name=apache2 state=started enabled=yes" worker02
 ```
 
-On ouvre le port 80 du security Group
+**On ouvre le port 80 du Security Group:**
+![screenshot003](./images/IMG-003.png)
 
+<br />
 
 * Désinstallation
 
@@ -253,14 +267,16 @@ ansible -i hosts -b -m package -a "name=nginx state=absent purge=yes autoremove=
 
 ansible -i hosts -b -m package -a "name=apache2 state=absent purge=yes autoremove=yes" worker02
 ```
+<br>
 
-Vérification que le service ne tourne plus:
+**Vérification que le service ne tourne plus:**
 ```sh
 #worker01
 ps -ef | grep nginx
 #worker02
 ps -ef | grep apache2
 ```
+<br>
 
 ### D – Inventaire au format yaml <a name="yaml"></a>
 

@@ -5,7 +5,7 @@ I. [Installation](#install)<br />
 &nbsp;&nbsp;&nbsp;A. [Création de 3 machines cloud ec2](#ec2)<br />
 &nbsp;&nbsp;&nbsp;B. [Installation ansible](#ansible)<br />
 II. [Manifest](#manifest)<br />
-&nbsp;&nbsp;&nbsp;A. [Gestion de l'inventaire](#manifest)<br />
+&nbsp;&nbsp;&nbsp;A. [Connexion aux workers](#ping)<br />
 &nbsp;&nbsp;&nbsp;B. [Module Copy](#copy)<br />
 &nbsp;&nbsp;&nbsp;C. [Module Package](#package)<br />
 &nbsp;&nbsp;&nbsp;D. [Inventaire au format yaml](#yaml)<br />
@@ -77,7 +77,7 @@ sudo yum install ansible
 
 ## II- Manifest <a name="manifest"></a>
 
-### A – Gestion de l'inventaire <a name="manifest"></a>
+### A – Connexion aux workers <a name="ping"></a>
 
 * IP privées
 master: 172.31.6.38
@@ -184,6 +184,7 @@ worker01 | SUCCESS => {
     "ping": "pong"
 }
 ```
+</details>
 <br />
 
 ### B – Module Copy <a name="copy"></a>

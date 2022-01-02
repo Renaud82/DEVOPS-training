@@ -85,7 +85,7 @@ worker01: 172.31.82.253
 worker02: 172.31.93.193
 
 ```sh
-vi hosts
+vi /etc/hosts
 ```
 <details>
 <summary><code>hosts</code></summary>
@@ -158,7 +158,7 @@ ansible -i hosts all -m ping
 * Modification du hosts
 
 ```sh
-vi hosts
+vi /etc/hosts
 ```
 <details>
 <summary><code>hosts</code></summary>
@@ -192,6 +192,8 @@ worker01 | SUCCESS => {
 ```sh
 ansible -i hosts all -m copy -a "dest=/home/ubuntu/renaud.txt content='Bonjour Renaud'"
 ```
+![screenshot002](./images/IMG-002.png)
+<br />
 
 ### C – Module Package <a name="package"></a>
 

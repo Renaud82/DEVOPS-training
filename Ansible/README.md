@@ -192,7 +192,7 @@ worker01 | SUCCESS => {
 ```sh
 ansible -i hosts all -m copy -a "dest=/home/ubuntu/renaud.txt content='Bonjour Renaud'"
 ```
-![screenshot002](./images/IMG-002.png)
+![screenshot002](./images/IMG-002.png =100x20)
 <br />
 
 ### C – Module Package <a name="package"></a>

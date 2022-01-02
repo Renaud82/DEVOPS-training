@@ -33,14 +33,12 @@ III. [Playbook](#playbook)<br />
 * renaud-sg-ansible : 22 (ssh)
 * key: renaud-kp-ajc.pem
 
-<br />
-
 ![screenshot001](./images/IMG-001.png)
 <br />
 
 ### B – Installation ansible <a name="ansible"></a>
 
-* Utilisation de utilitaire pip
+* Via l'utilitaire pip
 
 ```sh
 python3 --version
@@ -49,7 +47,11 @@ sudo apt-get -y install python3-pip
 sudo pip3 install ansible
 
 ansible --version
-------------
+```
+<details>
+<summary><code>résulat</code></summary>
+
+```sh
 ansible [core 2.12.1]
   config file = None
   configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
@@ -59,11 +61,11 @@ ansible [core 2.12.1]
   python version = 3.8.10 (default, Nov 26 2021, 20:14:08) [GCC 9.3.0]
   jinja version = 2.10.1
   libyaml = True
-------------
 ```
+</details>
 <br />
 
-* Utilisation du gestionnaire de packets
+* Via le gestionnaire de packets
 
 ```sh
 #!/bin/bash
@@ -71,7 +73,7 @@ sudo apt-get update
 sudo apt-get install ansible
 sudo yum install ansible
 ```
-
+<br />
 
 ## II- Manifest <a name="manifest"></a>
 
@@ -83,35 +85,53 @@ worker01: 172.31.82.253
 worker02: 172.31.93.193
 
 ```sh
-sudo apt-get install sshpass -y
-
 vi hosts
 ```
-**hosts:**
+<details>
+<summary><code>hosts</code></summary>
+
 ```sh
 172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
+</details>
 <br />
+
+* Test de ping vers worker01
 
 ```sh
 ansible -i hosts all -m ping
-------------
+```
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
 172.31.82.253 | FAILED! => {
     "msg": "to use the 'ssh' connection type with passwords or pkcs11_provider, you must install the sshpass program"
 }
-------------
+```
+</details>
+<br />
+
+* On doit installer sshpass pour les connexions ssh 
+
+```sh
 sudo apt-get -y install sshpass
 ansible -i hosts all -m ping
-------------
+```
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
 172.31.82.253 | UNREACHABLE! => {
     "changed": false,
     "msg": "Failed to connect to the host via ssh: Warning: Permanently added '172.31.82.253' (ECDSA) to the list of known hosts.\r\nubuntu@172.31.82.253: Permission denied (publickey).",
     "unreachable": true
 }
-------------
 ```
+</details>
+<br />
 
-* On doit activativer de l'authentification par password sur les clients
+* On doit activer l'authentification par password sur les clients
 
 ```sh
 sudo vi /etc/ssh/sshd_config      =>  PasswordAuthentication yes
@@ -120,30 +140,42 @@ sudo -i
 passwd ubuntu
 
 ansible -i hosts all -m ping
-------------
+```
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
 172.31.82.253 | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/bin/python3"
     },
     "changed": false,
     "ping": "pong"
-------------
 ```
+</details>
+<br />
 
 * Modification du hosts
 
 ```sh
 vi hosts
 ```
-**hosts:**
+<details>
+<summary><code>hosts</code></summary>
+
 ```sh
 worker01 ansible_host=172.31.82.253 ansible_user=ubuntu ansible_password=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ```
+</details>
 <br />
 
 ```sh
 ansible -i hosts all -m ping
-------------
+```
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
 worker01 | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/bin/python3"
@@ -151,8 +183,8 @@ worker01 | SUCCESS => {
     "changed": false,
     "ping": "pong"
 }
-------------
 ```
+<br />
 
 ### B – Module Copy <a name="copy"></a>
 

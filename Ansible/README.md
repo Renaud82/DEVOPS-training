@@ -5,12 +5,13 @@ I. [Installation](#install)<br />
 &nbsp;&nbsp;&nbsp;A. [Création de 3 machines cloud ec2](#ec2)<br />
 &nbsp;&nbsp;&nbsp;B. [Installation ansible](#ansible)<br />
 II. [Manifest](#manifest)<br />
-&nbsp;&nbsp;&nbsp;A. [Connexion aux workers (inventaire)](#ping)<br />
+&nbsp;&nbsp;&nbsp;A. [Gestion de l'inventaire](#inventaire)<br />
 &nbsp;&nbsp;&nbsp;B. [Module Copy](#copy)<br />
 &nbsp;&nbsp;&nbsp;C. [Module Package](#package)<br />
 &nbsp;&nbsp;&nbsp;D. [Inventaire au format yaml](#yaml)<br />
-&nbsp;&nbsp;&nbsp;E. [Module setup](#setup)<br />
-&nbsp;&nbsp;&nbsp;F. [Inventaire et variables](#variable)<br />
+&nbsp;&nbsp;&nbsp;E. [Module Setup](#setup)<br />
+&nbsp;&nbsp;&nbsp;F. [Les formats de l'inventaire](#multi)<br />
+&nbsp;&nbsp;&nbsp;F. [Variables](#variable)<br />
 III. [Playbook](#playbook)<br />
 &nbsp;&nbsp;&nbsp;A. [Utilisation du playbook](#useplaybook)<br />
 &nbsp;&nbsp;&nbsp;B. [Templating Jinja](#jinja)<br />
@@ -77,7 +78,7 @@ sudo yum install ansible
 
 ## II- Manifest <a name="manifest"></a>
 
-### A – Connexion aux workers (inventaire) <a name="ping"></a>
+### A – Gestion de l'inventaire <a name="inventaire"></a>
 
 * Création de l'inventaire
 
@@ -334,16 +335,16 @@ worker02 | SUCCESS => {
 <br />
 
 ### E – Module Setup <a name="setup"></a>
+<br>
 
-****
-TP 5
-****
+* Test du module Setup
 
 ```sh
 ansible -i hosts.yaml all -m setup 
 ansible -i hosts.yaml all -m setup | grep -i hostname
 ansible -i hosts.yaml all -m setup | grep ansible_distribution
 ```
+<br>
 
 ```sh
 #Récupérartion des variables de nos environnement
@@ -354,16 +355,18 @@ ansible-inventory -i hosts.yaml --host worker01 -y
 ```
 <br />
 
-### F – Inventaire et variables <a name="variable"></a>
+### F – Les formats de l'inventaire<a name="multi"></a>
 
-****
-TP 6
-****
+<br>
+
+* Création de l'inventaire au format ini 
 
 ```sh
 vi hosts.ini
 ```
-**hosts.ini:**
+<details>
+<summary><code>hosts.ini</code></summary>
+
 ```ini
 [all:vars]
 ansible_user=ubuntu
@@ -379,7 +382,10 @@ worker02 ansible_host=172.31.93.193 ansible_password=ubuntu
 [prod:vars]
 env=prod
 ```
+</details>
 <br />
+
+* Convertion de l'inventaire aux différents formats
 
 ```sh
 #Format yaml
@@ -393,10 +399,15 @@ ansible -i hosts.json -m ping all
 ```
 <br />
 
+* Vérification 
+
 ```sh
 vi host.yaml
 ```
-**host.yaml**
+
+<details>
+<summary><code>hosts.yaml</code></summary>
+
 ```yaml
 all:
   children:
@@ -422,8 +433,11 @@ all:
           env: prod
     ungrouped: {}
 ```
+</details>
+<br>
 
 
+### G – Variables <a name="variable"></a>
 ****
 TP 7 (surcharge)
 ****

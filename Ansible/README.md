@@ -25,15 +25,18 @@ III. [Playbook](#playbook)<br />
 
 ### A – Création d’une machine cloud ec2 (renaud-ec2-prod) <a name="ec2"></a>
 
-![screenshot001](./images/IMG-001.png)
 3 machines AWS
 
 * Ubuntu (renaud-ec2-master, renaud-ec2-worker01, renaud-ec2-worker02)
 * EC2 : t3.medium, t2.micro (x2)
 * 8 Go
-* renaud-sg-ansible : 22
-* master: 3.231.223.229 , worker01: 3.91.213.82 , worker02: 3.88.215.129
+* renaud-sg-ansible : 22 (ssh)
+* key: renaud-kp-ajc.pem
 
+<br />
+
+![screenshot001](./images/IMG-001.png)
+<br />
 
 ### B – Installation ansible <a name="ansible"></a>
 
@@ -1193,4 +1196,99 @@ worker02 | SUCCESS => {
 ```
 </details>
 
+OU dans le host:
 
+
+```yaml
+all:
+  vars:
+     ansible_ssh_private_key_file: /home/ubuntu/reno_key.pem
+  children:
+    prod:
+      hosts:
+        worker01:
+          ansible_host: 172.31.82.253
+          env: prod
+        worker02:
+          ansible_host: 172.31.93.193
+          env: prod
+```
+
+
+
+## IV- Fichier de configuration <a name="config"></a>
+
+```sh
+vi ansible.cfg
+```
+
+<details>
+<summary><code>ansible.cfg</code></summary>
+
+```ini
+[defaults]
+inventory = /home/ubuntu/webapp2/hosts.yaml
+ask_vault_pass = true
+
+[privilege_escalation]
+become = true
+```
+</detail>
+
+Plus besoin de préciser l'inventaire, le become=true
+
+```sh
+ansible --private-key ../reno_key.pem -m ping all
+```
+
+****
+TP 15 (config et secret)
+****
+
+
+mkdir files
+vi /files/secrets.yaml
+
+ansible_vault_user: ubuntu
+ansible_vault_password: ubuntu
+
+ ansible-vault encrypt files/secrets.yaml
+
+ vi hosts.yaml
+
+ all:
+  vars:
+   
+  children:
+    prod:
+      hosts:
+        worker01:
+          ansible_host: 172.31.82.253
+          ansible_user: "{{ ansible_vault_user }}"
+          ansible_password: "{{ ansible_vault_password }}"
+          env: prod
+        worker02:
+          ansible_host: 172.31.93.193
+          ansible_user: "{{ ansible_vault_user }}"
+          ansible_password: "{{ ansible_vault_password }}"
+          env: prod
+
+
+
+
+vi apache.yaml
+
+---
+- name: "install webserver"
+  hosts: prod
+  vars_files:
+    - files/secrets.yaml
+  tasks:
+    - name: "Create container apache"
+      docker_container:
+        name: apache
+        image: httpd
+        ports:
+          - "8080:80"
+        volumes:
+          - "/tmp/html/:/usr/local/apache2/htdocs/"

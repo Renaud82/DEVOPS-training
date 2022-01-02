@@ -438,13 +438,19 @@ all:
 
 
 ### G – Variables <a name="variable"></a>
-****
-TP 7 (surcharge)
-****
+<br>
+
+* Affichage des variables avec le module Debug:
+
 
 ```sh
 ansible -i hosts.yaml all -m debug -a "msg={{  env }} "
-------------
+```
+
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
 localhost | FAILED! => {
     "msg": "The task includes an option with an undefined variable. The error was: 'env' is undefined. 'env' is undefined"
 }
@@ -454,9 +460,8 @@ worker01 | SUCCESS => {
 worker02 | SUCCESS => {
     "msg": "prod"
 }
-------------
 ```
-
+</details>
 <br/>
 
 * Surcharge avec group_vars
@@ -466,7 +471,11 @@ mkdir group_vars
 vi group_vars/prod.yaml        =>   env: test_prod
 
 ansible -i hosts.ini all -m debug -a "msg={{  env }} "
-------------
+```
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
 localhost | FAILED! => {
     "msg": "The task includes an option with an undefined variable. The error was: 'env' is undefined. 'env' is undefined"
 }
@@ -476,8 +485,9 @@ worker02 | SUCCESS => {
 worker01 | SUCCESS => {
     "msg": "test_prod"
 }
-------------
+
 ```
+</details>
 <br />
 
 * Surcharge avec host_vars
@@ -488,7 +498,11 @@ mkdir host_vars
 vi host_vars/worker01.yaml      =>   env: test_prod_W1
 
 ansible -i hosts.ini all -m debug -a "msg={{  env }} "
-------------
+```
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
 localhost | FAILED! => {
     "msg": "The task includes an option with an undefined variable. The error was: 'env' is undefined. 'env' is undefined"
 }
@@ -498,14 +512,19 @@ worker01 | SUCCESS => {
 worker02 | SUCCESS => {
     "msg": "test_prod"
 }
-------------
 ```
+</details>
+<br>
 
 ```sh
 vi host_vars/localhost.yaml         =>   env: test_prod_local
 
 ansible -i hosts.ini all -m debug -a "msg={{  env }} "
-------------
+```
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
 localhost | SUCCESS => {
     "msg": "test_prod_local"
 }
@@ -515,8 +534,8 @@ worker01 | SUCCESS => {
 worker02 | SUCCESS => {
     "msg": "test_prod"
 }
-------------
 ```
+</details>
 <br />
 
 * Surcharger en utilisant le parameter –e

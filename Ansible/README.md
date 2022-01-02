@@ -255,7 +255,7 @@ ansible -i hosts -b -m package -a "name=apache2 state=present" worker02
 ansible -i hosts -b -m service -a "name=apache2 state=started enabled=yes" worker02
 ```
 
-**On ouvre le port 80 du Security Group:**
+On ouvre le port 80 du Security Group:
 ![screenshot003](./images/IMG-003.png)
 
 <br />
@@ -269,7 +269,7 @@ ansible -i hosts -b -m package -a "name=apache2 state=absent purge=yes autoremov
 ```
 <br>
 
-**Vérification que le service ne tourne plus:**
+Vérification que le service ne tourne plus:
 ```sh
 #worker01
 ps -ef | grep nginx
@@ -279,14 +279,15 @@ ps -ef | grep apache2
 <br>
 
 ### D – Inventaire au format yaml <a name="yaml"></a>
+<br>
 
-****
-TP 4
-****
+* Création de l'inventaire au format yaml
 ```sh
 vi hosts.yaml
 ```
-**hosts.yaml:**
+<details>
+<summary><code>hosts.yaml</code></summary>
+
 ```yaml
 all:
   hosts:
@@ -302,11 +303,35 @@ all:
       ansible_password: ubuntu
       ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 ```
+</details>
 <br />
+
+* Test de la connaxion aux workers
 
 ```sh
 ansible -i hosts.yaml -m ping all
 ```
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
+worker01 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+worker02 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+```
+</details>
+<br />
 
 ### E – Module Setup <a name="setup"></a>
 

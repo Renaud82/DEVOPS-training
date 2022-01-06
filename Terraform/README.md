@@ -18,22 +18,26 @@ III. [Playbook](#playbook)<br />
 
 ### A – Installation sur mac <a name="mac"></a>
 
-
-Sur Mac
-
-dl terraform
-sudo mv terraform /usr/local/bin
-
+* Télécharger l'archive terraform
+* Désarchivage pour récupérer le binaire
+* sudo mv terraform /usr/local/bin
 
 ### B – Installation sur linux <a name="linux"></a>
 
-Sur Ubuntu
-curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-sudo apt-get update && sudo apt-get install terraform
+* Ubuntu/Debian
+
+  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+  sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+  sudo apt-get update && sudo apt-get install terraform
+
+* CentOS
+
+  sudo yum install -y yum-utils
+  sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+  sudo yum -y install terraform
 
 
-![screenshot001](./images/IMG-001.png)
+<br>
 
 
 ## II- Deployer des ressources <a name="deploy"></a>

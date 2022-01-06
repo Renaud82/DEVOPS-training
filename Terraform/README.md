@@ -146,13 +146,17 @@ local_file.file1: Creation complete after 0s [id=52d29d313a281835e468f21725ac02a
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```
 </details>
-<br>
 
-**le fichier "terraform.tfstate" se créer et permet de contebir toutes les ressources**
+**Le fichier "terraform.tfstate" se créer et permet de contebir toutes les ressources**
 <br>
 
 ### B – Ressources Cloud AWS <a name="AWS"></a>
 
+* Fichier permettant la création d'une instance ec2 AWS simple avec :
+ - ami
+ - instance
+ - key pair
+ - tag
 
 <details>
 <summary><code>ec2.tf</code></summary>

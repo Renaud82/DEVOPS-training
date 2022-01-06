@@ -541,7 +541,11 @@ worker02 | SUCCESS => {
 * Surcharger en utilisant le parameter –e
 ```sh
 ansible -i hosts.ini all -m debug -a "msg={{  env }} " -e env=surcharge
-------------
+```
+<details>
+<summary><code>résultat</code></summary>
+
+```sh
 localhost | SUCCESS => {
     "msg": "surcharge"
 }
@@ -551,8 +555,8 @@ worker02 | SUCCESS => {
 worker01 | SUCCESS => {
     "msg": "surcharge"
 }
-------------
 ```
+<br>
 
 ## III- Playbook <a name="playbook"></a>
 
@@ -1278,7 +1282,7 @@ worker02 | UNREACHABLE! => {
     "unreachable": true
 }
 ```
-</detail>
+</details>
 <br />
 
 ```sh
@@ -1342,7 +1346,7 @@ ask_vault_pass = true
 [privilege_escalation]
 become = true
 ```
-</detail>
+</details>
 
 Plus besoin de préciser l'inventaire, le become=true
 
@@ -1363,8 +1367,11 @@ ansible_vault_password: ubuntu
 
  ansible-vault encrypt files/secrets.yaml
 
+```sh
  vi hosts.yaml
+```
 
+```yaml
  all:
   vars:
    
@@ -1381,12 +1388,14 @@ ansible_vault_password: ubuntu
           ansible_user: "{{ ansible_vault_user }}"
           ansible_password: "{{ ansible_vault_password }}"
           env: prod
+```
 
 
-
-
+```sh
 vi apache.yaml
+```
 
+```yaml
 ---
 - name: "install webserver"
   hosts: prod
@@ -1401,3 +1410,197 @@ vi apache.yaml
           - "8080:80"
         volumes:
           - "/tmp/html/:/usr/local/apache2/htdocs/"
+```
+
+
+
+
+
+***Delegate to***
+
+vi host.yaml
+
+```yaml
+all:
+  vars:
+#     ansible_ssh_private_key_file: /home/ubuntu/frazer-kp-ajc1.pem
+  children:
+    ansible:
+      hosts:
+        localhost:
+          ansible_connection: local
+          ansible_user: ubuntu
+          hostname: AnsibleMaster
+    prod:
+      vars:
+        env: production
+        ansible_user: ubuntu
+        ansible_password: "ubuntu"
+        ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+
+      hosts:
+        worker01:
+          ansible_host: 172.31.95.37
+          hostname: AnsibleWorker01
+  
+        worker02:
+          ansible_host: 172.31.95.0
+          hostname: AnsibleWorker02
+```
+
+
+
+
+
+vi test.yaml
+
+```yaml
+- name: "play to test delegate_to fonction"
+  hosts: all
+  become: true
+  serial: 2
+  tasks:
+    - name: register of all hosts on master
+      command: "sh -c 'echo {{ ansible_host }} {{ inventory_hostname }} >> /etc/hosts'"
+      tags: name
+      delegate_to: localhost
+
+    - name: "test var "
+      debug:
+        var: ansible_play_hosts
+```
+
+
+
+
+
+## Rôle
+
+
+
+AIDE
+
+'''sh
+git submodule add https://github.com/sadofrazer/odoo_role.git roles/odoo
+
+ansible-galaxy role init <nom_du_role>
+
+
+ansible_play_hosts
+
+
+
+
+ROLE DL par galaxi
+
+home/ubuntu/.ansible
+
+
+
+
+## IV- Ansible Tower <a name="config"></a>
+
+git clone https://github.com/sadofrazer/tower.git
+
+t2.medium minimum
+ubuntu
+8go
+
+ouverture du port 80
+
+'''sh
+#!/bin/bash
+#Install docker
+sudo apt-get update -y
+sudo apt-get install git wget curl -y
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+sudo usermod -aG docker ubuntu
+#Install Docker compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+git clone https://github.com/sadofrazer/tower.git
+cd tower/
+tar -xzvf awx.tar.gz -C ~/
+cd ~/.awx/awxcompose/
+docker-compose up -d
+'''
+
+
+* Param tower
+
+admin@password
+
+hosts.yml
+all:
+  children:
+    prod:
+      hosts:
+        worker01:
+          ansible_host: 172.31.90.87
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+  
+        worker02:
+          ansible_host: 172.31.86.63
+          ansible_ssh_common_args: -o StrictHostKeyChecking=no
+
+
+wordpress.yml
+- name: deploy wordpress using a role
+  hosts: all
+  become: true
+  roles:
+    - docker_role
+    - wordpress_role
+
+
+roles/requirements.yml
+
+- src: https://github.com/Renaud82/wordpress_role.git
+- src: https://github.com/Renaud82/docker_role.git
+
+
+* projet ->> new
+type ->  GIT -> url
+
+X mettre a jour revison au lancement
+
+
+* inventaire
+inventory_wordpress
+
+source -> creer nouvelle source -> inventory_src_wordpress
+
+provenance d'un fichier
+
+fichier d'inventaire hosts.yml
+
+synchroniser
+
+* information d'identification
+
+wordpress_vault
+type coffre-fort
+
+* modele
+
+sipmle
+
+wordpress_job
+
+type -> executer
+
+sélectrionner inventaire/projet/playbook
+
+
+
+Création projet → nom:deploy_wordpress_project → details source → url du repo git deploy_wordpress → nom branche (master ou main) → options de mise a jour scm : mettre à jour révision au lancement (pour toujours récupérer la dernière version sur github lors du lancement du projet) → enregistrer 
+
+Création inventaire → inventaire → + → inventaire (classique) → nom:inventory_wordpress → enregistrer → onglet sources → + → nom:inventory_src_wordpress → source:provenance d’un projet → repo public donc pas besoin de token → selection projet → selection fichier inventaire → hosts.yml (celui qui est à la racine du repo) → options de mise à jour scm : mettre à jour au lancement → enregistrer → cliquer sur synchronisation pour récupérer l'inventaire → onglet hôtes pour visualiser les hôtes → cliquer sur hôtes pour voir leurs variables → enregistrer → retour inventaire avec logos verts si ok
+
+Création credentials → infos d'identification → + → nom:wordpress_vault → type:coffre-fort(vault) → organisation:default → motdepasse → enregistrer → + → nom:hosts_prod_id → type:machine → organisation:default → user:ubuntu → motdepasse:ubuntu (ou copie de clé privée en fonction du playbook) → methode d’escalade privilégiée:sudo → motdepasse:ubuntu → enregistré
+
+Création job template → modèles → + →modèle de job → nom:deploy_wordpress_job → type:executer → inventaire:inventory_wordpress → projet:deploy_wordpress_project → playbook:wordpress.yml → info d’identification:host_prod_id et wordpress_vault → enregistrer → enregistrer
+
+Modèle → icone fusée du deploy_wordpress_job pour lancer le job 
+

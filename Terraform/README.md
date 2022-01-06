@@ -153,10 +153,11 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ### B – Ressources Cloud AWS <a name="AWS"></a>
 
 * Fichier permettant la création d'une instance ec2 AWS simple avec :
- - ami
- - instance
- - key pair
- - tag
+ 
+  - ami
+  - instance
+  - key pair
+  - tag
 
 <details>
 <summary><code>ec2.tf</code></summary>

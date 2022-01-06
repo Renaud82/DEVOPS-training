@@ -24,11 +24,11 @@ III. [Playbook](#playbook)<br />
 
 ### B – Installation sur linux <a name="linux"></a>
 
-* Ubuntu/Debian
+* Ubuntu/Debian:
 
-  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-  sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-  sudo apt-get update && sudo apt-get install terraform
+    curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+    sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+    sudo apt-get update && sudo apt-get install terraform
 
 * CentOS
 
@@ -41,7 +41,6 @@ III. [Playbook](#playbook)<br />
 
 
 ## II- Deployer des ressources <a name="deploy"></a>
-
 
 ### A – local_file <a name="loacal_file"></a>
 
@@ -57,7 +56,6 @@ resource "local_file" "file1" {
 }
 '''
 </details>
-<br>
 
 * Initialisation
 
@@ -88,7 +86,6 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 ```
 </details>
-<br>
 
 * Plan
 
@@ -114,7 +111,6 @@ Terraform will perform the following actions:
 Plan: 1 to add, 0 to change, 0 to destroy.
 ```
 </details>
-<br>
 
 * Apply
 

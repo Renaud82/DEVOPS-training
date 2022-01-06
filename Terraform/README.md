@@ -6,10 +6,9 @@ I. [Installation](#install)<br />
 &nbsp;&nbsp;&nbsp;B. [Installation sur linux](#linux)<br />
 II. [Deployer des ressources](#deploy)<br />
 &nbsp;&nbsp;&nbsp;A. [local_file](#local_file)<br />
-&nbsp;&nbsp;&nbsp;B. [Module Copy](#copy)<br />
-III. [Playbook](#playbook)<br />
-&nbsp;&nbsp;&nbsp;A. [Utilisation du playbook](#useplaybook)<br />
-&nbsp;&nbsp;&nbsp;B. [Templating Jinja](#jinja)<br />
+&nbsp;&nbsp;&nbsp;B. [Ressources Cloud AWS](#AWS)<br />
+&nbsp;&nbsp;&nbsp;B. [Variables](#var)<br />
+
 
 
 
@@ -149,6 +148,39 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 </details>
 <br>
 
+**le fichier "terraform.tfstate" se créer et permet de contebir toutes les ressources**
+<br>
+
+### B – Ressources Cloud AWS <a name="AWS"></a>
+
+
+<details>
+<summary><code>ec2.tf</code></summary>
+
+```sh
+provider "aws" {
+    region = "us-east-1"
+    access_key = "AKIAXXXNTM5FPKFMG7AV"
+    secret_key = "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"
+}
+
+resource "aws_instance" "renaud-ec2" {
+    ami = "ami-04505e74c0741db8d"
+    instance_type = "t2.micro"
+    key_name = "renaud-kp-ajc"
+    tags = {
+        Name = "renaud-ec2-terraform"
+        formation = "Frazer"
+        iac = "terraform"
+    }
+}
+```
+</details>
+
+terraform apply terraform apply --auto-approve
+
+
+### C – Variables <a name="var"></a>
 
 
 
@@ -157,22 +189,6 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 
 
-
-
-
-
-
-
-
-
-
-ACCCESS KEY AWS
-
-Access key ID
-AKIAXXXNTM5FEKXLHC3M
-
-Secret access key
-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
 
 
 

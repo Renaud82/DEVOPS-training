@@ -45,10 +45,12 @@ III. [Playbook](#playbook)<br />
 
 ### A – local_file <a name="loacal_file"></a>
 
+* Création de la ressource file1
+
 <details>
 <summary><code>file.tf</code></summary>
 
-'''tf
+'''sh
 resource "local_file" "file1" {
     filename="/Users/renaudsautour/Downloads/DEVOPS/Terraform/TP2/Renaud.txt"
     content="Bonjour Renaud"
@@ -56,6 +58,8 @@ resource "local_file" "file1" {
 '''
 </details>
 <br>
+
+* Initialisation
 
 <details>
 <summary><code>terraform init</code></summary>
@@ -86,6 +90,8 @@ commands will detect it and remind you to do so if necessary.
 </details>
 <br>
 
+* Plan
+
 <details>
 <summary><code>terraform plan</code></summary>
 
@@ -109,6 +115,8 @@ Plan: 1 to add, 0 to change, 0 to destroy.
 ```
 </details>
 <br>
+
+* Apply
 
 <details>
 <summary><code>terraform apply</code></summary>
@@ -141,7 +149,7 @@ local_file.file1: Creating...
 local_file.file1: Creation complete after 0s [id=52d29d313a281835e468f21725ac02a39039ce7f]
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
-'''
+```
 </details>
 <br>
 

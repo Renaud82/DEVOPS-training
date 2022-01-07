@@ -7,8 +7,9 @@ I. [Installation](#install)<br />
 II. [Deployer des ressources](#deploy)<br />
 &nbsp;&nbsp;&nbsp;A. [local_file](#local_file)<br />
 &nbsp;&nbsp;&nbsp;B. [Ressources Cloud AWS](#AWS)<br />
-&nbsp;&nbsp;&nbsp;B. [Variables](#var)<br />
-
+&nbsp;&nbsp;&nbsp;C. [Variables](#var)<br />
+&nbsp;&nbsp;&nbsp;D. [Attributs](#attributs)<br />
+&nbsp;&nbsp;&nbsp;E. [Data source](#data)<br />
 
 
 
@@ -165,8 +166,8 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ```sh
 provider "aws" {
     region = "us-east-1"
-    access_key = "AKIAXXXNTM5FPKFMG7AV"
-    secret_key = "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"
+    access_key = "XXXX"
+    secret_key = "XXXX"
 }
 
 resource "aws_instance" "renaud-ec2" {
@@ -182,25 +183,153 @@ resource "aws_instance" "renaud-ec2" {
 ```
 </details>
 
-terraform apply terraform apply --auto-approve
+* terraform apply terraform apply --auto-approve
 
+* terraform destroy -target aws_instance.renaud-ec2
+
+<br>
 
 ### C – Variables <a name="var"></a>
 
+<details>
+<summary><code>variables.tf</code></summary>
+
+```sh
+variable "instancetype" {
+    default = "t2.small"
+}
+
+variable "ami_id" {
+    default = "ami-04505e74c0741db8d"
+}
+```
+</details>
+
+<br>
+<details>
+<summary><code>ec2.tf</code></summary>
+
+```sh
+provider "aws" {
+    region = "us-east-1"
+    access_key = "XXXX"
+    secret_key = "XXXX"
+}
+
+resource "aws_instance" "renaud-ec2" {
+    ami = var.ami_id
+    instance_type = var.instancetype
+    key_name = "renaud-kp-ajc"
+    tags = {
+        Name = "renaud-ec2-terraform-var"
+        formation = "Frazer"
+        iac = "terraform"
+    }
+}
+```
+</details>
+
+apply
+
+<img>
+
+
+**surchtarge**
+
+terraform.tfvars
+
+instancetype = "t2.medium"
+
+
+apply
+
+<img>
 
 
 
+**on peut formater les fichiers avec terraform fmt"**
 
+**suppression$$
+terraform destroy -target aws_instance.renaud-ec2
 
-
-
-
-
-
-<br />
+### D – Attributs <a name="attributs"></a>
 
 <details>
-<summary><code>résulat</code></summary>
+<summary><code>variables.tf</code></summary>
 
+```sh
+variable "instancetype" {
+    default = "t2.small"
+}
+
+variable "ami_id" {
+    default = "ami-04505e74c0741db8d"
+}
+```
 </details>
-<br />
+
+<br>
+<details>
+<summary><code>ec2.tf</code></summary>
+
+```sh
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "XXXX"
+  secret_key = "XXXX"
+}
+
+resource "aws_instance" "renaud-ec2" {
+  ami           = var.ami_id
+  instance_type = var.instancetype
+  key_name      = "renaud-kp-ajc"
+  tags = {
+    Name      = "renaud-ec2-terraform"
+    formation = "Frazer"
+    iac       = "terraform"
+  }
+}
+
+resource "local_file" "file" {
+    filename="/Users/renaudsautour/Downloads/DEVOPS/Terraform/TP5/ec2-parameters.txt"
+    content="Pour cet EC2, nous avons utilisé le type d’instance ${aws_instance.renaud-ec2.instance_type} et l’image ${aws_instance.renaud-ec2.ami} où instance_type et ami sont les attributs de la ressource ec2 précédemment crée."
+}
+
+resource "aws_eip" "ajc-lb" {
+  vpc = true
+}
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.renaud-ec2.id
+  allocation_id = aws_eip.ajc-lb.id
+}
+```
+</details>
+<br>
+
+### E – Data source <a name="data"></a>
+
+* on récupère le contenu d'un fichier pour s'en servir de paramètre
+
+<details>
+<summary><code>ec2.tf</code></summary>
+
+```sh
+resource "aws_instance" "renaud-ec2" {
+  ami           = "ami-04505e74c0741db8d"
+  instance_type = data.local_file.file.content
+  key_name      = "renaud-kp-ajc"
+  tags = {
+    Name      = "renaud-ec2-terraform"
+    formation = "Frazer"
+    iac       = "terraform"
+  }
+}
+
+data "local_file" "file" {
+    filename="/Users/renaudsautour/Downloads/DEVOPS/Terraform/TP6/info.txt"
+}
+```
+</details>
+<br>
+

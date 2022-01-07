@@ -182,7 +182,7 @@ resource "aws_instance" "renaud-ec2" {
 ```
 </details>
 
-terraform apply terraform apply --auto-approve
+[spoiler]terraform apply terraform apply --auto-approve[/spoiler]
 
 
 ### C – Variables <a name="var"></a>

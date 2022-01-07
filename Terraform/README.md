@@ -183,7 +183,6 @@ resource "aws_instance" "renaud-ec2" {
 ```
 </details>
 
-<<<<<<< HEAD
 * terraform apply terraform apply --auto-approve
 
 * terraform destroy -target aws_instance.renaud-ec2
@@ -316,6 +315,12 @@ resource "aws_eip_association" "eip_assoc" {
 <summary><code>ec2.tf</code></summary>
 
 ```sh
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "XXXX"
+  secret_key = "XXXX"
+}
+
 resource "aws_instance" "renaud-ec2" {
   ami           = "ami-04505e74c0741db8d"
   instance_type = data.local_file.file.content
@@ -334,3 +339,71 @@ data "local_file" "file" {
 </details>
 <br>
 
+* Création de VPC et recherche d'une AMI
+
+<details>
+<summary><code>data.tf</code></summary>
+
+```sh
+data "aws_ami" "recent_ami" {
+    most_recent =  true
+    owners = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["Deep Learning AMI (Amazon Li*"]
+  }
+}
+```
+</details>
+
+<details>
+<summary><code>ec2.tf</code></summary>
+
+```sh
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "XXXX"
+  secret_key = "XXXX"
+}
+
+resource "aws_instance" "renaud-ec2" {
+  ami           = data.aws_ami.recent_ami.id
+  instance_type = var.instancetype
+  key_name      = "renaud-kp-ajc"
+  vpc_security_group_ids = [aws_security_group.sg.id]
+  tags = {
+    Name      = "renaud-ec2-terraform"
+    formation = "Frazer"
+    iac       = "terraform"
+  }
+}
+
+resource "aws_security_group" "sg" {
+  name        = "renaud-sg-terraform"
+  description = "Allow some port"
+
+  ingress {
+    description      = "TLS"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  ingress {
+    description      = "HTML"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "renaud_sg_terraform"
+  }
+}
+```
+</details>

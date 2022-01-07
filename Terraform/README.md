@@ -187,9 +187,6 @@ resource "aws_instance" "renaud-ec2" {
 * terraform apply terraform apply --auto-approve
 
 * terraform destroy -target aws_instance.renaud-ec2
-=======
-[spoiler]terraform apply terraform apply --auto-approve[/spoiler]
->>>>>>> 4fd4b0687e1394de865724c516dfa26d54dce6c2
 
 <br>
 

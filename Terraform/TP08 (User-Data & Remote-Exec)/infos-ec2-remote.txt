@@ -1,0 +1,1 @@
+renaud-ec2-nginx-remote [PUBLIC IP : 18.234.186.153 , ID: i-08fda2233b66c059a , AZ: us-east-1b]

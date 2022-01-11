@@ -11,9 +11,6 @@ II. [Deployer des ressources](#deploy)<br />
 &nbsp;&nbsp;&nbsp;D. [Attributs](#attributs)<br />
 &nbsp;&nbsp;&nbsp;E. [Data source](#data)<br />
 
-
-
-
 ## I- Installation <a name="install"></a>
 
 ### A – Installation sur mac <a name="mac"></a>

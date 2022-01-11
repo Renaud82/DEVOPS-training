@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = "AKIAXXXNTM5FPKFMG7AV"
-  secret_key = "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"
+  access_key = "XXXX"
+  secret_key = "XXXX"
 }
 
 resource "aws_instance" "renaud-ec2" {

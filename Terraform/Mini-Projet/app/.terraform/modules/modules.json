@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"ebs_creation","Source":"../modules/ebs","Dir":"../modules/ebs"},{"Key":"sg_creation","Source":"../modules/sg","Dir":"../modules/sg"},{"Key":"eip_creation","Source":"../modules/eip","Dir":"../modules/eip"},{"Key":"ec2_creation","Source":"../modules/ec2","Dir":"../modules/ec2"},{"Key":"","Source":"","Dir":"."}]}

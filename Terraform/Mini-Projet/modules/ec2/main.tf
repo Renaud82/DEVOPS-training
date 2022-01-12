@@ -8,6 +8,10 @@ resource "aws_instance" "myec2" {
     iac       = "terraform"
   }
 
+  root_block_device {
+    delete_on_termination = true
+  }
+
   vpc_security_group_ids = [var.sg_id]
 
   user_data              = <<-EOF

@@ -334,7 +334,8 @@ data "local_file" "file" {
 }
 ```
 </details>
-<br>
+
+</br>
 
 * Création de VPC et recherche d'une AMI
 

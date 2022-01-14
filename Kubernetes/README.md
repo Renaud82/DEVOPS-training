@@ -5,6 +5,7 @@
 
 # Installation <a name="installation"></a>
 ## Install Minikube CentOS 
+
 ```sh
 #!/bin/bash
 sudo yum -y update

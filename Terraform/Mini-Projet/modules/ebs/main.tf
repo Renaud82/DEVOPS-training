@@ -3,7 +3,7 @@ resource "aws_ebs_volume" "myebs" {
   size              = var.ebs_size
 
   tags = {
-    Name = "${var.ebs_tag_name}"
+    Name      = "${var.ebs_tag_name}"
     formation = "${var.ebs_tag_formation}"
   }
 }
